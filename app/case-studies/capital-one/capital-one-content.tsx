@@ -116,7 +116,7 @@ export function CapitalOneContent() {
       <main id="main-content">
         <CaseHero
           title="AI-Powered Decision Support"
-          intro="Building Capital One's first human-in-the-loop AI feature for its risk management platform and defining reusable interaction patterns for future AI systems."
+          intro="Building the platform's first human-in-the-loop AI feature for its risk management platform and defining reusable interaction patterns for future AI systems."
           pills={["Explainable AI", "AI Decision Support", "Enterprise Risk", "Cross-Functional Collaboration"]}
           meta={[
             { label: "Role", value: "Sole UX Designer" },
