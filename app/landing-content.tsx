@@ -52,7 +52,7 @@ const CASES: {
     title: "Modernizing a live enterprise platform.",
     blurb:
       "I modernized a mature case-management platform, simplifying the navigation, data-heavy screens, and complex forms while creating patterns we could reuse across the product.",
-    href: "/portfolio-import/case-studies/monster-modernization",
+    href: "/case-studies/monster-modernization",
     statValue: "100+",
     statLabel: "Legacy pages updated",
     images: [
@@ -66,7 +66,7 @@ const CASES: {
     title: "Designing human-in-the-loop AI for enterprise risk management.",
     blurb:
       "I redesigned how analysts reviewed AI-generated findings, giving them the confidence, evidence, and reasoning behind each result before they made a decision.",
-    href: "/portfolio-import/case-studies/capital-one",
+    href: "/case-studies/capital-one",
     statValue: "5×",
     statLabel: "Estimated analyst review productivity",
 images: [
@@ -88,7 +88,7 @@ images: [
     title: "Building a recruiting platform from the ground up.",
     blurb:
       "I redesigned the recruiting workflow to bring candidate information, validation, and handoffs between systems into one experience.",
-    href: "/portfolio-import/case-studies/monster-talent",
+    href: "/case-studies/monster-talent",
     statValue: "5+",
     statLabel: "Enterprise system handoffs connected",
     images: [
@@ -102,7 +102,7 @@ images: [
     title: "Turning a $10M+ customer journey into a funded opportunity.",
     blurb:
       "I found an opportunity to simplify Bonvoy promotion registration, used the data to make the case for the redesign, and reduced the experience from six steps to two.",
-    href: "/portfolio-import/case-studies/marriott",
+    href: "/case-studies/marriott",
     statValue: "+30%",
     statLabel: "Promotional registrations",
     images: [
@@ -160,7 +160,7 @@ export function LandingContent() {
       <PrimaryNav
         links={[
           { label: "Case Studies", href: "#work" },
-          { label: "About", href: "/portfolio-import/about" },
+          { label: "About", href: "/about" },
         ]}
         resume={{ href: RESUME_URL }}
       />
@@ -557,7 +557,7 @@ export function LandingContent() {
               </a>
             </li>
             <li>
-              <Link href="/portfolio-import/about" className="hover:text-[#FF5733]">
+              <Link href="/about" className="hover:text-[#FF5733]">
                 About
               </Link>
             </li>

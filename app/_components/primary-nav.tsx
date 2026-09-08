@@ -35,7 +35,7 @@ interface NavLink {
 }
 
 export function PrimaryNav({
-  brandHref = "/portfolio-import",
+  brandHref = "/",
   links,
   resume,
   innerClassName,

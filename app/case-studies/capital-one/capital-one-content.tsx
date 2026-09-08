@@ -67,11 +67,11 @@ export function CapitalOneContent() {
     }
   }, []);
 
-  const caseNav = getCaseStudyNav("/portfolio-import/case-studies/capital-one");
+  const caseNav = getCaseStudyNav("/case-studies/capital-one");
 
   const prevLink = fromGaming
     ? {
-        href: "/portfolio-import/case-studies/blizzard-ui",
+        href: "/case-studies/blizzard-ui",
         eyebrow: "All Work",
         title: "Blizzard Entertainment / StarCraft II — UI Design",
       }
@@ -79,7 +79,7 @@ export function CapitalOneContent() {
 
   const nextLink = fromGaming
     ? {
-        href: "/portfolio-import/case-studies/monster?from=gaming",
+        href: "/case-studies/monster?from=gaming",
         eyebrow: "Next →",
         title: "Monster Government Solutions — Enterprise Legacy Modernization",
       }
@@ -95,10 +95,10 @@ export function CapitalOneContent() {
       </a>
 
       <PrimaryNav
-        brandHref="/portfolio-import#top"
+        brandHref="/#top"
         links={[
-          { label: "Case Studies", href: "/portfolio-import#work" },
-          { label: "About", href: "/portfolio-import/about" },
+          { label: "Case Studies", href: "/#work" },
+          { label: "About", href: "/about" },
         ]}
         resume={{ href: fromGaming ? RESUME_URL_GAMING : RESUME_URL }}
       />

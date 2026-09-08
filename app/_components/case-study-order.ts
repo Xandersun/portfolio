@@ -13,19 +13,19 @@ interface CaseStudyOrderEntry {
 
 export const CASE_STUDY_ORDER: CaseStudyOrderEntry[] = [
   {
-    href: "/portfolio-import/case-studies/monster-modernization",
+    href: "/case-studies/monster-modernization",
     title: "Monster Government Solutions — Modernizing a Mature Enterprise Platform",
   },
   {
-    href: "/portfolio-import/case-studies/capital-one",
+    href: "/case-studies/capital-one",
     title: "Capital One — AI-Powered Decision Support",
   },
   {
-    href: "/portfolio-import/case-studies/monster-talent",
+    href: "/case-studies/monster-talent",
     title: "Monster Government Solutions — Talent Intelligence Platform",
   },
   {
-    href: "/portfolio-import/case-studies/marriott",
+    href: "/case-studies/marriott",
     title: "Marriott Bonvoy — Promotion Registration",
   },
 ];

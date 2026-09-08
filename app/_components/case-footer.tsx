@@ -22,13 +22,13 @@ export function CaseFooter({
       <div className="mx-auto flex w-[min(1180px,calc(100%-64px))] flex-wrap items-center justify-between gap-3">
         <p className="m-0 text-[15px] text-[#64748B]">© 2026 Alex Sun</p>
         <div className={cn("flex flex-wrap items-center gap-5 text-[15px] text-[#334155]")}>
-          <Link href="/portfolio-import#work" className="hover:text-[#FF5733]">
+          <Link href="/#work" className="hover:text-[#FF5733]">
             Work
           </Link>
-          <Link href="/portfolio-import#how-i-work" className="hover:text-[#FF5733]">
+          <Link href="/#how-i-work" className="hover:text-[#FF5733]">
             Philosophy
           </Link>
-          <Link href="/portfolio-import#experience" className="hover:text-[#FF5733]">
+          <Link href="/#experience" className="hover:text-[#FF5733]">
             Experience
           </Link>
           <a href="mailto:alexandersun@gmail.com" className="hover:text-[#FF5733]">

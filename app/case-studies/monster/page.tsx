@@ -73,8 +73,8 @@ const RESUME_URL =
   "https://docs.google.com/document/d/1qfTNVm7pdK8m5son9igaz1lhZs7LPSXb/edit?usp=drive_link&ouid=101666787535519743600&rtpof=true&sd=true";
 
 const NAV_LINKS = [
-  { label: "Case Studies", href: "/portfolio-import#work" },
-  { label: "About", href: "/portfolio-import/about" },
+  { label: "Case Studies", href: "/#work" },
+  { label: "About", href: "/about" },
 ];
 
 const TOC_ITEMS = [
@@ -102,7 +102,7 @@ export default function PortfolioImportMonsterCaseStudyPage() {
         Skip to main content
       </a>
 
-      <PrimaryNav brandHref="/portfolio-import#top" links={NAV_LINKS} resume={{ href: RESUME_URL }} />
+      <PrimaryNav brandHref="/#top" links={NAV_LINKS} resume={{ href: RESUME_URL }} />
       <CaseToc items={TOC_ITEMS} />
 
       <main id="main-content">
@@ -357,12 +357,12 @@ export default function PortfolioImportMonsterCaseStudyPage() {
         <div className="px-4 sm:px-8 md:px-[max(2rem,calc((100vw-1180px)/2))]">
           <CaseNavFooter
             prev={{
-              href: "/portfolio-import/case-studies/monster-talent",
+              href: "/case-studies/monster-talent",
               eyebrow: "← Previous",
               title: "Monster Government Solutions — Talent Intelligence Platform",
             }}
             next={{
-              href: "/portfolio-import/case-studies/marriott",
+              href: "/case-studies/marriott",
               eyebrow: "Next →",
               title: "Marriott Bonvoy — Promotion Registration",
             }}

@@ -51,8 +51,8 @@ export default function PortfolioImportAboutPage() {
     >
       <PrimaryNav
         links={[
-          { label: "Work", href: "/portfolio-import" },
-          { label: "About", href: "/portfolio-import/about" },
+          { label: "Work", href: "/" },
+          { label: "About", href: "/about" },
         ]}
         resume={{ href: RESUME_URL }}
         innerClassName="mx-auto max-w-[1080px] px-8"

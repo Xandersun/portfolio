@@ -83,8 +83,8 @@ const RESUME_URL =
   "https://docs.google.com/document/d/1qfTNVm7pdK8m5son9igaz1lhZs7LPSXb/edit?usp=drive_link&ouid=101666787535519743600&rtpof=true&sd=true";
 
 const NAV_LINKS = [
-  { label: "Case Studies", href: "/portfolio-import#work" },
-  { label: "About", href: "/portfolio-import/about" },
+  { label: "Case Studies", href: "/#work" },
+  { label: "About", href: "/about" },
 ];
 
 const TOC_ITEMS = [
@@ -96,7 +96,7 @@ const TOC_ITEMS = [
 ];
 
 export default function PortfolioImportMonsterTalentPage() {
-  const { prev, next } = getCaseStudyNav("/portfolio-import/case-studies/monster-talent");
+  const { prev, next } = getCaseStudyNav("/case-studies/monster-talent");
 
   return (
     <div className={cn("portfolio-import bg-white selection:bg-[#FF5733] selection:text-white", manrope.className)}>
