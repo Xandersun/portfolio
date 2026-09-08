@@ -285,7 +285,7 @@ export function MarriottContent() {
 
           <RevealFigure
             reveal
-            src="/portfolio-import/images/marriott/before-flow.svg"
+            src="/portfolio-import/images/marriott/before-flow.png"
             alt="Authentication-gated registration: personalized promotion email, Marriott.com, authenticate, promotion page, register, confirmation, connected by downward arrows. The authenticate step is tinted amber as the focal point."
             caption={
               <>
