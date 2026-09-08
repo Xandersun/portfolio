@@ -1,0 +1,257 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-general-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* ============================================================
+   Portfolio design tokens
+   ------------------------------------------------------------
+   Single source of truth for the portfolio's type scale, weight
+   system, tracking, and layout/spacing rhythm. Section components
+   should consume these through the .portfolio-* classes below
+   (or the raw --space- and --content- vars for layout) rather
+   than redefining font sizes, families, weights, or tracking
+   locally.
+
+   Fluid sizes use clamp() tuned for a ~400px (mobile) to ~1440px
+   (desktop) viewport range, landing on the desktop targets below:
+
+     display  96px   section  72px   project  48px
+     lead     24px   body     18px   caption  14px   eyebrow 12px
+
+   Not used by the (defense-app) dashboard prototype — that route
+   keeps its own tokens in lib/design-tokens.ts.
+   ============================================================ */
+:root {
+  /* Type scale */
+  --text-display: clamp(3.5rem, 2.5385rem + 3.846vw, 6rem); /* 56px → 96px */
+  --text-section: clamp(2.75rem, 2.077rem + 2.692vw, 4.5rem); /* 44px → 72px */
+  --text-project: clamp(2.25rem, 1.962rem + 1.154vw, 3rem); /* 36px → 48px */
+  --text-lead: clamp(1.25rem, 1.154rem + 0.385vw, 1.5rem); /* 20px → 24px */
+  --text-body: clamp(1.0625rem, 1.038rem + 0.096vw, 1.125rem); /* 17px → 18px */
+  --text-caption: clamp(0.8125rem, 0.788rem + 0.096vw, 0.875rem); /* 13px → 14px */
+  --text-eyebrow: clamp(0.6875rem, 0.663rem + 0.096vw, 0.75rem); /* 11px → 12px */
+
+  /* Line heights (unitless) */
+  --leading-display: 0.97;
+  --leading-section: 1.02;
+  --leading-project: 1.05;
+  --leading-lead: 1.3;
+  --leading-body: 1.55;
+  --leading-caption: 1.4;
+  --leading-eyebrow: 1.25;
+
+  /* Tracking — tight/negative on large type, subtle positive on eyebrows only */
+  --tracking-display: -0.02em;
+  --tracking-section: -0.02em;
+  --tracking-project: -0.015em;
+  --tracking-eyebrow: 0.02em;
+
+  /* Weights */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* Layout */
+  --content-max-width: 80rem; /* 1280px */
+  --content-measure: 40rem; /* 640px readable text measure for body copy */
+  --page-gutter: clamp(1.5rem, 0.538rem + 3.846vw, 4rem); /* 24px → 64px */
+  --header-height: 76px; /* sticky site header — also used as scroll-mt on nav targets */
+
+  /* Motion — one shared duration so interactions (currently: the assistant
+     panel's open/close transition) don't each hard-code their own value */
+  --motion-duration: 300ms;
+
+  /* Spacing — small fluid scale so sections avoid arbitrary pixel values */
+  --space-1: 0.5rem; /* 8px */
+  --space-2: 1rem; /* 16px */
+  --space-3: clamp(1.5rem, 1.308rem + 0.769vw, 2rem); /* 24px → 32px */
+  --space-4: clamp(2rem, 1.538rem + 1.923vw, 3rem); /* 32px → 48px */
+  --space-5: clamp(3rem, 2.154rem + 3.462vw, 5rem); /* 48px → 80px */
+  --space-6: clamp(5rem, 3.462rem + 5.769vw, 8rem); /* 80px → 128px */
+  --space-7: clamp(6rem, 4.462rem + 6.154vw, 10rem); /* 96px → 160px — major section rhythm */
+}
+
+@layer components {
+  .portfolio-display {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-display);
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+  }
+  .portfolio-section-title {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-section);
+    line-height: var(--leading-section);
+    letter-spacing: var(--tracking-section);
+  }
+  .portfolio-project-title {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-project);
+    line-height: var(--leading-project);
+    letter-spacing: var(--tracking-project);
+  }
+  .portfolio-lead {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-lead);
+    line-height: var(--leading-lead);
+  }
+  .portfolio-body {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+  }
+  .portfolio-caption {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+  }
+  .portfolio-eyebrow {
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-eyebrow);
+    line-height: var(--leading-eyebrow);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+  }
+
+  /* Shared boilerplate for hover/focus-reveal caption lines (SpeakingMedia,
+     Experience) — only the transition mechanics are identical across those;
+     the actual show/hide breakpoints and values differ per usage and stay
+     local to each component. */
+  .portfolio-reveal-transition {
+    @apply overflow-hidden transition-all duration-300 motion-reduce:transition-none;
+  }
+}

@@ -1,0 +1,87 @@
+/* ==========================================================================
+   portfolio-import — scroll-reveal animation only.
+
+   Deliberately kept as a small, tightly-scoped CSS file rather than
+   Tailwind: the behavior needs an ancestor-class gate (".js", added by
+   useReveal only when JS actually runs, so the page still degrades to
+   fully-visible content with no JS or reduced-motion) combined with
+   per-element stagger via inline transitionDelay — expressing that with
+   Tailwind's group-variant syntax would be more convoluted than this ~30
+   lines of plain CSS. Everything else in the refactored pages is Tailwind.
+
+   Scoped under .portfolio-import; used only by pages that call useReveal
+   (landing, Capital One, Marriott — the pages that had the source's
+   reveal-on-scroll script). Monster and Monster Talent never had it and
+   don't import this file.
+   ========================================================================== */
+
+.portfolio-import .reveal,
+.portfolio-import .metric,
+.portfolio-import .reveal-h3,
+.portfolio-import .reveal-img,
+.portfolio-import .reveal-badge {
+  opacity: 1;
+  transform: none;
+}
+
+.portfolio-import.js .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.portfolio-import.js .reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.portfolio-import.js .metric {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.portfolio-import.js .metric.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.portfolio-import.js .reveal-h3 {
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.portfolio-import.js .reveal-h3.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.portfolio-import.js .reveal-img {
+  opacity: 0;
+  transform: translateY(12px) scale(0.99);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.portfolio-import.js .reveal-img.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.portfolio-import.js .reveal-badge {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.portfolio-import.js .reveal-badge.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-import.js .reveal,
+  .portfolio-import.js .metric,
+  .portfolio-import.js .reveal-h3,
+  .portfolio-import.js .reveal-img,
+  .portfolio-import.js .reveal-badge {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

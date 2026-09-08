@@ -1,0 +1,90 @@
+/* ==========================================================================
+   portfolio-import — Monster Government Solutions case study styles.
+
+   IMPLEMENTATION REFACTOR pass: this file used to carry the full page CSS
+   (~1095 lines, layering a base "Monster" pass, a reused "Capital One
+   visual system" pass, and a page-specific two-tier sticky-nav pass — see
+   git history for the previous version). All of that generic page-chrome
+   (nav, hero, sections, figures, footer, case-nav, disclosure note) is now
+   built with Tailwind utilities + the shared portfolio-import components
+   (PrimaryNav, CaseToc, CaseHero, CaseSection, RevealFigure, CaseNavFooter,
+   CaseFooter) directly in page.tsx, matching the pattern already
+   established for the marriott and capital-one case studies.
+
+   What's kept here is the one genuinely bespoke, content-specific visual
+   pattern this case study needs that isn't a reasonable fit for inline
+   Tailwind: the "Navigation Responsibilities" 4-column card grid inside the
+   #navigation-system section (the case study is literally about
+   consolidating navigation, so the body content includes its own
+   illustrative nav-layer diagram). Its responsive border-collapse behavior
+   (verticals dividers at 4-col, then a row divider re-flow at 2-col, then
+   no dividers at 1-col) needs nth-child selectors that don't have a clean
+   Tailwind-only expression, so it's kept as plain scoped CSS (ported
+   1:1 from the old #navigation-system .case-layers rules, renamed to
+   .nav-layers-grid since it's now applied via a plain className instead of
+   an id-scoped selector).
+   ========================================================================== */
+
+.portfolio-import .nav-layers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  width: 100%;
+  margin-top: 40px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-top: 5px solid #ff5733;
+  border-radius: 10px;
+}
+
+.portfolio-import .nav-layers-grid > div {
+  padding: 26px 24px 30px;
+  border-left: 1px solid #e2e8f0;
+}
+
+.portfolio-import .nav-layers-grid > div:first-child {
+  border-left: 0;
+}
+
+.portfolio-import .nav-layers-grid dt {
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.portfolio-import .nav-layers-grid dd {
+  margin: 10px 0 0;
+  color: #334155;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .portfolio-import .nav-layers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .portfolio-import .nav-layers-grid > div:nth-child(3) {
+    border-left: 0;
+  }
+
+  .portfolio-import .nav-layers-grid > div:nth-child(n + 3) {
+    border-top: 1px solid #e2e8f0;
+  }
+}
+
+@media (max-width: 560px) {
+  .portfolio-import .nav-layers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-import .nav-layers-grid > div {
+    border-left: 0;
+  }
+
+  .portfolio-import .nav-layers-grid > div:not(:first-child) {
+    border-top: 1px solid #e2e8f0;
+  }
+}
