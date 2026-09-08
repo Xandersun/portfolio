@@ -290,7 +290,7 @@ interface ChecklistItem {
  */
 function railFlyoutItemClassName(isSelected: boolean) {
   return cn(
-    "rail-flyout-item rounded-md px-0 py-2.5 text-[15px]",
+    "rail-flyout-item rounded-md px-1.5 py-2.5 text-[15px]",
     isSelected ? "bg-teal-50 font-semibold text-teal-800" : "text-slate-900",
   );
 }
@@ -550,15 +550,16 @@ function RailIcon({
         onMouseEnter={() => onRequestOpenHover(item.key)}
         onMouseLeave={() => onRequestCloseHover(item.key)}
         // Sized to its own content (group label, destinations, nested-menu
-        // chevrons) rather than a fixed 220px — `w-max`/`min-w-0` override
-        // the shared popup base's own `w-(--anchor-width)`/`min-w-32`, so
-        // the flyout is exactly as wide as its widest row plus this
-        // uniform 16px (`p-4`) padding on every edge — no per-row
-        // horizontal padding left to add on top of it.
-        className="rail-flyout w-max min-w-0 border border-slate-200 bg-white p-4 text-slate-900 shadow-md"
+        // chevrons) rather than a fixed 220px — `w-fit` overrides the
+        // shared popup base's `w-(--anchor-width)`, and there's no
+        // min-width left to remove any unused space it was creating.
+        // px-3/py-2 (rather than the shared popup base's own padding)
+        // give the card itself a bit more breathing room at its own
+        // edges, on top of each row's own padding below.
+        className="rail-flyout w-fit border border-slate-200 bg-white px-3 py-2 text-slate-900 shadow-md"
       >
         <DropdownMenuGroup>
-          <DropdownMenuLabel className="mb-2 px-0 py-0 font-semibold tracking-wide text-slate-600 uppercase">
+          <DropdownMenuLabel className="py-1.5 font-semibold tracking-wide text-slate-600 uppercase">
             {item.label}
           </DropdownMenuLabel>
           {item.children.map((child) =>
@@ -569,32 +570,18 @@ function RailIcon({
                   // The shared component (components/ui/dropdown-menu.tsx,
                   // not edited here — it's used elsewhere too) hardcodes
                   // its chevron with `ml-auto`, which pushes it to this
-                  // row's far edge whenever the flyout is wider than this
-                  // label alone needs (e.g. driven by a longer sibling
-                  // row). `[&>svg]:ml-0` cancels that auto margin via a
-                  // higher-specificity selector (class+type beats the
-                  // chevron's own single class), so the row's own
-                  // `gap-3.5` (overriding the shared default `gap-1.5`) is
-                  // the only thing spacing label from chevron — a fixed
-                  // 14px regardless of the flyout's overall width.
-                  className="rail-flyout-item rounded-md px-0 py-2.5 text-[15px] text-slate-900 gap-3.5 [&>svg]:ml-0"
+                  // row's far edge whenever the flyout ends up wider than
+                  // this label alone needs (e.g. driven by a longer
+                  // sibling row). `[&>svg]:ml-3` overrides just that one
+                  // child's margin via a higher-specificity selector
+                  // (class+type beats the chevron's own single class), so
+                  // the chevron stays a fixed distance after the label
+                  // regardless of the flyout's overall width.
+                  className="rail-flyout-item rounded-md px-1.5 py-2.5 text-[15px] text-slate-900 [&>svg]:ml-2"
                 >
                   {child.label}
                 </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent
-                  // Base UI anchors this to the trigger ROW, not to Menu
-                  // 1/2's own popup edge — and the row sits inset from
-                  // that edge by the popup's own right padding + border
-                  // (16px + 1px). Default sideOffset is 0
-                  // (components/ui/dropdown-menu.tsx), which at that inset
-                  // reads as this flyout's border overlapping Menu 1/2's
-                  // own. 23 = 17 (that inset) + 6, landing the actual
-                  // border-to-border gap at ~6px without widening it
-                  // enough to make crossing from the trigger into this
-                  // flyout awkward.
-                  sideOffset={23}
-                  className="rail-flyout w-max min-w-0 border border-slate-200 bg-white p-4 text-slate-900 shadow-md"
-                >
+                <DropdownMenuSubContent className="rail-flyout w-fit border border-slate-200 bg-white px-3 py-2 text-slate-900 shadow-md">
                   {child.children.map((grandchild) => (
                     <DropdownMenuItem
                       key={grandchild.key}
