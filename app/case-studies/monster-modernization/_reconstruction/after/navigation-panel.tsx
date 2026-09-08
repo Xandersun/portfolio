@@ -290,7 +290,7 @@ interface ChecklistItem {
  */
 function railFlyoutItemClassName(isSelected: boolean) {
   return cn(
-    "rail-flyout-item rounded-md px-1.5 py-2 text-[15px]",
+    "rail-flyout-item rounded-md px-1.5 py-2.5 text-[15px]",
     isSelected ? "bg-teal-50 font-semibold text-teal-800" : "text-slate-900",
   );
 }
@@ -553,10 +553,13 @@ function RailIcon({
         // chevrons) rather than a fixed 220px — `w-fit` overrides the
         // shared popup base's `w-(--anchor-width)`, and there's no
         // min-width left to remove any unused space it was creating.
-        className="rail-flyout w-fit border border-slate-200 bg-white p-1.5 text-slate-900 shadow-md"
+        // px-3/py-2 (rather than the shared popup base's own padding)
+        // give the card itself a bit more breathing room at its own
+        // edges, on top of each row's own padding below.
+        className="rail-flyout w-fit border border-slate-200 bg-white px-3 py-2 text-slate-900 shadow-md"
       >
         <DropdownMenuGroup>
-          <DropdownMenuLabel className="font-semibold tracking-wide text-slate-600 uppercase">
+          <DropdownMenuLabel className="py-1.5 font-semibold tracking-wide text-slate-600 uppercase">
             {item.label}
           </DropdownMenuLabel>
           {item.children.map((child) =>
@@ -574,11 +577,11 @@ function RailIcon({
                   // (class+type beats the chevron's own single class), so
                   // the chevron stays a fixed distance after the label
                   // regardless of the flyout's overall width.
-                  className="rail-flyout-item rounded-md px-1.5 py-2 text-[15px] text-slate-900 [&>svg]:ml-2"
+                  className="rail-flyout-item rounded-md px-1.5 py-2.5 text-[15px] text-slate-900 [&>svg]:ml-2"
                 >
                   {child.label}
                 </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent className="rail-flyout w-fit border border-slate-200 bg-white p-1.5 text-slate-900 shadow-md">
+                <DropdownMenuSubContent className="rail-flyout w-fit border border-slate-200 bg-white px-3 py-2 text-slate-900 shadow-md">
                   {child.children.map((grandchild) => (
                     <DropdownMenuItem
                       key={grandchild.key}
