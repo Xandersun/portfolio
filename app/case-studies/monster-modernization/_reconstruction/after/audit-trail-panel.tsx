@@ -27,7 +27,7 @@ import { exportToCsv } from "@/components/data-grid/export-utils";
 import type { DataGridColumn } from "@/components/data-grid/types";
 import { useSandboxNotify } from "../../_living-system/monster-notification-provider";
 
-const { Title, Paragraph, Text } = Typography;
+const { Text } = Typography;
 
 type ActionType = "Created" | "Updated" | "Approved" | "Flagged" | "Exported";
 
@@ -193,14 +193,7 @@ export function AuditTrailPanel() {
   };
 
   return (
-    <div style={{ padding: 24 }}>
-      <Title level={2} style={{ marginBottom: 4 }}>
-        Audit Trail
-      </Title>
-      <Paragraph type="secondary" style={{ marginBottom: 16, color: "#334155" }}>
-        Timestamped changelog with user attribution. Expand a row to see the field-level diff for that entry.
-      </Paragraph>
-
+    <div style={{ padding: "0 24px 24px" }}>
       <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
         <Button icon={<DownloadOutlined />} onClick={handleExport}>
           Export audit log
