@@ -140,18 +140,6 @@ export function CapitalOneContent() {
             The new workflow embedded AI evaluation directly into the authoring experience which provided immediate
             feedback allowing them to resolve issues earlier while preserving human decision-making.
           </p>
-
-          <RevealFigure
-            reveal
-            src="/portfolio-import/images/capital-one/workflow.png"
-            alt="Compact vertical workflow showing reactive review steps"
-            caption={
-              <>
-                <strong>Human-in-the-Loop Architecture:</strong> Embedded real-time AI evaluation into the authoring
-                phase so analysts can resolve data quality issues prior to formal submission.
-              </>
-            }
-          />
         </CaseSection>
 
         <CaseSection id="process-design" heading="Key Decisions" tone="paper" reveal>
