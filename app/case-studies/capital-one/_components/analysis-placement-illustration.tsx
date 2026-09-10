@@ -1,167 +1,207 @@
-"use client";
-
-import { useState } from "react";
-import { Bold, Check, Italic, List, Minus } from "lucide-react";
-
-import { cn } from "@/lib/utils";
+import { HelpCircle, Sparkles, ThumbsDown, ThumbsUp } from "lucide-react";
 
 /**
- * Portfolio illustration (not the real Capital One production UI) for the
- * "Analysis Placement" decision: AI evaluation embedded directly beside the
- * control description being authored, rather than a separate report or
- * chat surface. Clicking a criterion on the right highlights the text it
- * was evaluated against on the left — for "Frequency" (not detected),
- * there's no matching text, so selecting it instead calls out the missing
- * placeholder inline.
+ * Static HTML/CSS recreation of the original "Analysis Placement" screenshot
+ * (public/portfolio-import/images/capital-one/panels.png) — a wireframe-style
+ * product mockup, not the real Capital One production UI. Rebuilt at the
+ * source image's own proportions (743px design width, measured directly from
+ * the source pixels) rather than reinterpreted, per this pass's brief: match
+ * the original image as closely as possible, no redesign.
  */
 
-type CriterionKey = "activity" | "ownership" | "frequency";
+const NAVY = "#1b3a6b";
+const MUTED = "#9aa0a9";
+const DESC_GRAY = "#707e92";
+const BORDER = "#dbe1ea";
+const SKELETON = "#d7dee8";
+const INPUT_BG = "#eaf0fa";
+const DETECTED_BG = "#e7eef9";
+const DETECTED_TEXT = "#5b7290";
+const NOT_DETECTED_BG = "#fdf0e3";
+const NOT_DETECTED_TEXT = "#b5651d";
 
-interface Criterion {
-  key: CriterionKey;
-  name: string;
-  detected: boolean;
-  explanation: string;
+function LabelBar({ width }: { width: number }) {
+  return <div className="mb-1 h-2 rounded-[2px]" style={{ width, background: SKELETON }} />;
 }
 
-const CRITERIA: Criterion[] = [
-  {
-    key: "activity",
-    name: "Control activity",
-    detected: true,
-    explanation: "Reviews privileged-access activity and investigates exceptions.",
-  },
-  {
-    key: "ownership",
-    name: "Ownership",
-    detected: true,
-    explanation: "Identifies the Security Operations team as responsible.",
-  },
-  {
-    key: "frequency",
-    name: "Frequency",
-    detected: false,
-    explanation: "No clear review frequency is specified.",
-  },
+function InputBox({ height = 24, className = "" }: { height?: number; className?: string }) {
+  return <div className={`mb-2 rounded ${className}`} style={{ height, background: INPUT_BG }} />;
+}
+
+const REPORT_ROWS = [
+  { width: 72, detected: true },
+  { width: 64, detected: true },
+  { width: 80, detected: true },
+  { width: 60, detected: false },
+  { width: 70, detected: true },
 ];
 
-function ToolbarGlyph({ children, label }: { children: React.ReactNode; label: string }) {
+function StatusPill({ detected }: { detected: boolean }) {
   return (
     <span
-      aria-label={label}
-      className="flex size-6 items-center justify-center rounded text-slate-400"
+      className="inline-flex shrink-0 items-center gap-1 rounded px-2 py-[3px] text-[10px] font-bold tracking-wide uppercase"
+      style={{
+        background: detected ? DETECTED_BG : NOT_DETECTED_BG,
+        color: detected ? DETECTED_TEXT : NOT_DETECTED_TEXT,
+      }}
     >
-      {children}
+      {detected ? "Detected" : "Not Detected"}
+      <HelpCircle className="size-2.5" />
     </span>
   );
 }
 
 export function AnalysisPlacementIllustration() {
-  const [selected, setSelected] = useState<CriterionKey>("activity");
-
   return (
-    <div className="mx-auto w-full max-w-[1100px] overflow-hidden rounded-xl border border-slate-200 bg-white">
-      <div className="flex flex-col md:flex-row">
-        {/* LEFT — Control Description */}
-        <div className="w-full border-b border-slate-200 p-6 md:w-[58%] md:border-r md:border-b-0">
-          <div className="mb-6 flex items-center justify-between">
-            <span className="text-[12px] font-semibold tracking-wide text-slate-500 uppercase">
-              Control Description
-            </span>
-            <span className="rounded bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">Draft</span>
-          </div>
+    <div className="mx-auto w-full max-w-[743px]">
+      <h4 className="mb-2.5 text-center text-[13px] font-bold tracking-wide uppercase" style={{ color: NAVY }}>
+        AI Analysis in the Authoring Workflow
+      </h4>
+      <p className="mx-auto mb-8 max-w-[420px] text-center text-[13px] leading-[1.6]" style={{ color: DESC_GRAY }}>
+        The form and the AI report live in one interface, so analysts review AI findings without disrupting their
+        workflow.
+      </p>
 
-          <div className="mb-2 flex items-center gap-1 border-b border-slate-100 pb-2">
-            <ToolbarGlyph label="Bold">
-              <Bold className="size-3.5" />
-            </ToolbarGlyph>
-            <ToolbarGlyph label="Italic">
-              <Italic className="size-3.5" />
-            </ToolbarGlyph>
-            <ToolbarGlyph label="Bulleted list">
-              <List className="size-3.5" />
-            </ToolbarGlyph>
-          </div>
+      <div className="overflow-hidden rounded-[10px] border" style={{ borderColor: "#e6e6e6" }}>
+        {/* Browser chrome bar */}
+      <div className="flex h-[29px] items-center gap-1.5 px-3.5" style={{ background: "#c9d0da" }}>
+        <span className="size-1.5 rounded-full" style={{ background: "#9aa4b2" }} />
+        <span className="size-1.5 rounded-full" style={{ background: "#9aa4b2" }} />
+        <span className="size-1.5 rounded-full" style={{ background: "#9aa4b2" }} />
+        <span className="ml-2.5 h-4 w-[220px] rounded-full bg-white" />
+      </div>
 
-          <p className="text-[14px] leading-relaxed text-slate-700">
-            This control{" "}
-            <span
-              className={cn(
-                "rounded-sm px-0.5",
-                selected === "activity" && "bg-amber-100 text-slate-900",
-              )}
+      {/* App header */}
+      <div
+        className="flex items-center justify-between border-b px-4 py-2.5"
+        style={{ borderColor: "#eef0f2" }}
+      >
+        <span className="text-[13px] font-bold" style={{ color: NAVY }}>
+          Enterprise Risk Management Platform
+        </span>
+        <div className="flex gap-4 text-[12px]" style={{ color: MUTED }}>
+          <span>Dashboard</span>
+          <span>Controls</span>
+          <span>Reports</span>
+          <span>Settings</span>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="px-4 pt-4 pb-5">
+        <h4 className="mb-1 text-[15px] font-bold" style={{ color: NAVY }}>
+          Control Description
+        </h4>
+        <p className="mb-4 text-[12px] leading-[1.5]" style={{ color: DESC_GRAY }}>
+          Control descriptions document the business processes and safeguards used to reduce operational and
+          regulatory risk.
+        </p>
+
+        <div className="flex flex-col gap-4 md:flex-row">
+          {/* LEFT — form card */}
+          <div className="rounded-md border p-4 md:basis-[65%]" style={{ borderColor: BORDER }}>
+            <LabelBar width={130} />
+            <InputBox />
+            <LabelBar width={95} />
+            <InputBox />
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <LabelBar width={110} />
+              </div>
+              <div className="flex-1">
+                <LabelBar width={110} />
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <InputBox className="flex-1" />
+              <InputBox className="flex-1" />
+            </div>
+            <LabelBar width={70} />
+            <InputBox height={48} />
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <LabelBar width={110} />
+              </div>
+              <div className="flex-1">
+                <LabelBar width={110} />
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <InputBox className="flex-1" />
+              <InputBox className="flex-1" />
+            </div>
+            <LabelBar width={70} />
+            <InputBox height={66} className="mb-3" />
+
+            <button
+              type="button"
+              tabIndex={-1}
+              aria-hidden="true"
+              className="inline-flex cursor-default items-center gap-1.5 rounded-md px-4 py-2.5 text-[13px] font-semibold text-white"
+              style={{ background: NAVY }}
             >
-              reviews privileged-access activity across production systems and investigates any exceptions
-              identified during the review
-            </span>
-            , performed on{" "}
-            <span className="whitespace-nowrap">
-              <span
-                className={cn(
-                  "rounded-sm border-b border-dashed border-slate-400 px-0.5 text-slate-500 italic",
-                  selected === "frequency" && "border-slate-500 bg-slate-100 text-slate-700",
-                )}
-              >
-                an unspecified basis
+              <Sparkles className="size-3.5" />
+              Run Analysis
+            </button>
+          </div>
+
+          {/* RIGHT — AI Analysis card */}
+          <div className="flex flex-col rounded-md border p-4 md:basis-[35%]" style={{ borderColor: BORDER }}>
+            <h5 className="mb-2.5 text-[14px] font-bold" style={{ color: NAVY }}>
+              AI Analysis
+            </h5>
+
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-[10px] font-bold tracking-wide uppercase" style={{ color: MUTED }}>
+                AI Confidence
               </span>
-              {selected === "frequency" && (
-                <span className="ml-1.5 inline-block rounded bg-slate-200 px-1.5 py-0.5 align-middle text-[11px] font-medium text-slate-600">
-                  Missing
-                </span>
-              )}
+              <span className="text-[12px] font-semibold" style={{ color: NAVY }}>
+                Medium
+              </span>
+            </div>
+            <div className="mb-4 h-2 rounded-[2px]" style={{ background: SKELETON }} />
+
+            <span className="mb-2 text-[10px] font-bold tracking-wide uppercase" style={{ color: MUTED }}>
+              Report
             </span>
-            .{" "}
-            <span
-              className={cn(
-                "rounded-sm px-0.5",
-                selected === "ownership" && "bg-amber-100 text-slate-900",
-              )}
-            >
-              The Security Operations team
-            </span>{" "}
-            is responsible for monitoring access logs and documenting findings in the case management system.
-            Escalations are routed to the Information Security Officer when further evaluation is required.
-          </p>
-        </div>
-
-        {/* RIGHT — AI Analysis */}
-        <div className="w-full bg-slate-50/60 p-6 md:w-[42%]">
-          <h4 className="mb-4 text-[16px] font-semibold text-slate-900">AI Analysis</h4>
-          <p className="mb-6 text-[12px] leading-snug text-slate-500">
-            This description is evaluated against 3 required criteria.
-          </p>
-
-          <div className="flex flex-col gap-2">
-            {CRITERIA.map((criterion) => (
-              <button
-                key={criterion.key}
-                type="button"
-                onClick={() => setSelected(criterion.key)}
-                aria-pressed={selected === criterion.key}
-                className={cn(
-                  "rounded-md border p-4 text-left",
-                  selected === criterion.key
-                    ? "border-slate-300 bg-white shadow-sm"
-                    : "border-slate-200 bg-white hover:border-slate-300",
-                )}
-              >
-                <div className="mb-2 flex items-center justify-between gap-2">
-                  <span className="text-[13px] font-semibold text-slate-800">{criterion.name}</span>
-                  <span
-                    className={cn(
-                      "inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] font-medium whitespace-nowrap",
-                      criterion.detected ? "bg-green-50 text-green-700" : "bg-slate-100 text-slate-500",
-                    )}
-                  >
-                    {criterion.detected ? <Check className="size-3" /> : <Minus className="size-3" />}
-                    {criterion.detected ? "Detected" : "Not Detected"}
-                  </span>
+            <div className="flex flex-col gap-2">
+              {REPORT_ROWS.map((row, i) => (
+                <div key={i} className="flex items-center justify-between gap-2">
+                  <div className="h-2 rounded-[2px]" style={{ width: row.width, background: SKELETON }} />
+                  <StatusPill detected={row.detected} />
                 </div>
-                <p className="text-[12px] leading-snug text-slate-500">{criterion.explanation}</p>
-              </button>
-            ))}
+              ))}
+            </div>
+
+            <span className="mt-4 mb-2 text-[10px] font-bold tracking-wide uppercase" style={{ color: MUTED }}>
+              Attribution
+            </span>
+            <div className="h-2 rounded-[2px]" style={{ background: SKELETON }} />
+
+            <div className="flex-1" />
+
+            <div className="flex items-center justify-between pt-4">
+              <span className="text-[11px]" style={{ color: MUTED }}>
+                Was this helpful?
+              </span>
+              <div className="flex gap-1.5">
+                <span
+                  className="flex size-[22px] items-center justify-center rounded border"
+                  style={{ borderColor: "#e2e6ea", color: MUTED }}
+                >
+                  <ThumbsUp className="size-3" />
+                </span>
+                <span
+                  className="flex size-[22px] items-center justify-center rounded border"
+                  style={{ borderColor: "#e2e6ea", color: MUTED }}
+                >
+                  <ThumbsDown className="size-3" />
+                </span>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
