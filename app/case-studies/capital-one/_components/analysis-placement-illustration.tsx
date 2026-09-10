@@ -1,5 +1,7 @@
 import { HelpCircle, Sparkles, ThumbsDown, ThumbsUp } from "lucide-react";
 
+import { CaseStudySubsectionHeader } from "../../../_components/case-study-subsection-header";
+
 /**
  * Static HTML/CSS recreation of the original "Analysis Placement" screenshot
  * (public/portfolio-import/images/capital-one/panels.png) — a wireframe-style
@@ -38,15 +40,17 @@ const REPORT_ROWS = [
 
 function StatusPill({ detected }: { detected: boolean }) {
   return (
-    <span
-      className="inline-flex shrink-0 items-center gap-1 rounded px-2 py-[3px] text-[10px] font-bold tracking-wide uppercase"
-      style={{
-        background: detected ? DETECTED_BG : NOT_DETECTED_BG,
-        color: detected ? DETECTED_TEXT : NOT_DETECTED_TEXT,
-      }}
-    >
-      {detected ? "Detected" : "Not Detected"}
-      <HelpCircle className="size-2.5" />
+    <span className="inline-flex shrink-0 items-center" style={{ gap: 5 }}>
+      <span
+        className="rounded px-2 py-[3px] text-[10px] font-bold tracking-wide uppercase"
+        style={{
+          background: detected ? DETECTED_BG : NOT_DETECTED_BG,
+          color: detected ? DETECTED_TEXT : NOT_DETECTED_TEXT,
+        }}
+      >
+        {detected ? "Detected" : "Not Detected"}
+      </span>
+      <HelpCircle className="size-3" style={{ color: MUTED }} aria-hidden="true" />
     </span>
   );
 }
@@ -54,13 +58,10 @@ function StatusPill({ detected }: { detected: boolean }) {
 export function AnalysisPlacementIllustration() {
   return (
     <div className="mx-auto w-full max-w-[743px]">
-      <h4 className="mb-2.5 text-center text-[13px] font-bold tracking-wide uppercase" style={{ color: NAVY }}>
-        AI Analysis in the Authoring Workflow
-      </h4>
-      <p className="mx-auto mb-8 max-w-[420px] text-center text-[13px] leading-[1.6]" style={{ color: DESC_GRAY }}>
-        The form and the AI report live in one interface, so analysts review AI findings without disrupting their
-        workflow.
-      </p>
+      <CaseStudySubsectionHeader
+        heading="AI Analysis in the Authoring Workflow"
+        description="The form and the AI report live in one interface, so analysts review AI findings without disrupting their workflow."
+      />
 
       <div className="overflow-hidden rounded-[10px] border" style={{ borderColor: "#e6e6e6" }}>
         {/* Browser chrome bar */}
@@ -88,11 +89,9 @@ export function AnalysisPlacementIllustration() {
       </div>
 
       {/* Content */}
-      <div className="px-4 pt-4 pb-5">
-        <h4 className="mb-1 text-[15px] font-bold" style={{ color: NAVY }}>
-          Control Description
-        </h4>
-        <p className="mb-4 text-[12px] leading-[1.5]" style={{ color: DESC_GRAY }}>
+      <div className="px-4 pb-5" style={{ paddingTop: 28 }}>
+        <h4 style={{ margin: "0 0 4px 0", fontSize: 15, fontWeight: 700, color: NAVY }}>Control Description</h4>
+        <p style={{ margin: "0 0 16px 0", fontSize: 14, lineHeight: 1.55, color: DESC_GRAY }}>
           Control descriptions document the business processes and safeguards used to reduce operational and
           regulatory risk.
         </p>
