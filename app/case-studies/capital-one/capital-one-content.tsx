@@ -107,8 +107,6 @@ export function CapitalOneContent() {
       <CaseToc
         items={[
           { href: "#overview", label: "Overview" },
-          { href: "#challenge", label: "Traditional Workflow" },
-          { href: "#solution", label: "AI-Assisted Workflow" },
           { href: "#process-design", label: "Key Decisions" },
           { href: "#impact", label: "Impact" },
         ]}
@@ -134,20 +132,12 @@ export function CapitalOneContent() {
           </p>
         </CaseSection>
 
-        <CaseSection id="challenge" heading="AI-Assisted Workflow" tone="surface" reveal>
-          <p>
-            Analysts were responsible for writing control descriptions that had to satisfy compliance requirements.
-            The new workflow embedded AI evaluation directly into the authoring experience which provided immediate
-            feedback allowing them to resolve issues earlier while preserving human decision-making.
-          </p>
-        </CaseSection>
-
         <CaseSection id="process-design" heading="Key Decisions" tone="paper" reveal>
           <h3>Analysis Placement</h3>
           <p>
-            The AI evaluation was embedded directly alongside the authoring experience rather than presented as a
-            separate workflow or chat interface. Analysts could review AI feedback while editing the control
-            description, eliminating the need to switch contexts or navigate away from their work.
+            Analysts needed to write control descriptions that satisfied compliance requirements. We embedded AI
+            evaluation directly into the authoring experience, giving them immediate feedback while keeping review
+            and decision-making with the analyst.
           </p>
           <figure className="reveal-img mx-auto mt-15 w-full max-w-[743px]">
             <AnalysisPlacementIllustration />
