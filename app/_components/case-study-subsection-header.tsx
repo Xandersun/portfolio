@@ -12,7 +12,18 @@
  * so a Tailwind size class here would silently lose. Inline styles always
  * win regardless of ancestor context, which is what makes this reliably
  * reusable across any case-study section.
+ *
+ * `CASE_STUDY_SUPPORTING_TEXT_STYLE` is exported so any other supporting
+ * line in a case study — including one sitting inside an embedded product
+ * mockup, not just this header's own paragraph — can be kept in exact sync
+ * with this one by reusing the same object instead of re-typing its values.
  */
+export const CASE_STUDY_SUPPORTING_TEXT_STYLE = {
+  fontSize: 14,
+  lineHeight: 1.6,
+  color: "#333333",
+} as const;
+
 export function CaseStudySubsectionHeader({
   heading,
   description,
@@ -25,7 +36,7 @@ export function CaseStudySubsectionHeader({
       <h4 style={{ fontSize: 18, lineHeight: 1.35, fontWeight: 700, margin: "0 0 6px 0", color: "#111111" }}>
         {heading}
       </h4>
-      <p style={{ fontSize: 14, lineHeight: 1.6, margin: 0, maxWidth: 720, color: "#333333" }}>{description}</p>
+      <p style={{ ...CASE_STUDY_SUPPORTING_TEXT_STYLE, margin: 0, maxWidth: 720 }}>{description}</p>
     </div>
   );
 }

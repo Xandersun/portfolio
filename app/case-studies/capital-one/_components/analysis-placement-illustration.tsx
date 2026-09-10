@@ -1,6 +1,9 @@
 import { HelpCircle, Sparkles, ThumbsDown, ThumbsUp } from "lucide-react";
 
-import { CaseStudySubsectionHeader } from "../../../_components/case-study-subsection-header";
+import {
+  CASE_STUDY_SUPPORTING_TEXT_STYLE,
+  CaseStudySubsectionHeader,
+} from "../../../_components/case-study-subsection-header";
 
 /**
  * Static HTML/CSS recreation of the original "Analysis Placement" screenshot
@@ -13,7 +16,6 @@ import { CaseStudySubsectionHeader } from "../../../_components/case-study-subse
 
 const NAVY = "#1b3a6b";
 const MUTED = "#9aa0a9";
-const DESC_GRAY = "#707e92";
 const BORDER = "#dbe1ea";
 const SKELETON = "#d7dee8";
 const INPUT_BG = "#eaf0fa";
@@ -91,7 +93,7 @@ export function AnalysisPlacementIllustration() {
       {/* Content */}
       <div className="px-4 pb-5" style={{ paddingTop: 28 }}>
         <h4 style={{ margin: "0 0 4px 0", fontSize: 15, fontWeight: 700, color: NAVY }}>Control Description</h4>
-        <p style={{ margin: "0 0 16px 0", fontSize: 14, lineHeight: 1.55, color: DESC_GRAY }}>
+        <p style={{ ...CASE_STUDY_SUPPORTING_TEXT_STYLE, margin: "0 0 16px 0" }}>
           Control descriptions document the business processes and safeguards used to reduce operational and
           regulatory risk.
         </p>
