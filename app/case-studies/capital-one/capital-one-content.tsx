@@ -39,6 +39,7 @@ import { CaseToc } from "../../_components/case-toc";
 import { CaseHero } from "../../_components/case-hero";
 import { CaseSection } from "../../_components/case-section";
 import { RevealFigure } from "../../_components/reveal-figure";
+import { AnalysisPlacementIllustration } from "./_components/analysis-placement-illustration";
 import { CaseNavFooter } from "../../_components/case-nav-footer";
 import { CaseFooter } from "../../_components/case-footer";
 import { getCaseStudyNav } from "../../_components/case-study-order";
@@ -160,17 +161,13 @@ export function CapitalOneContent() {
             separate workflow or chat interface. Analysts could review AI feedback while editing the control
             description, eliminating the need to switch contexts or navigate away from their work.
           </p>
-          <RevealFigure
-            reveal
-            src="/portfolio-import/images/capital-one/panels.png"
-            alt="Split-panel interface with authoring form on left and AI evaluation report on right"
-            caption={
-              <>
-                <strong>Unified Workspace:</strong> Paired authoring directly with real-time AI evaluation so
-                analysts could review feedback without leaving their workflow.
-              </>
-            }
-          />
+          <figure className="reveal-img mx-auto mt-15 w-full max-w-[1100px]">
+            <AnalysisPlacementIllustration />
+            <figcaption className="mt-3 mb-16 pl-3 text-sm leading-normal text-[#64748B] [&_strong]:font-bold [&_strong]:text-[#334155]">
+              <strong>Unified Workspace:</strong> Paired authoring directly with real-time AI evaluation so
+              analysts could review feedback without leaving their workflow.
+            </figcaption>
+          </figure>
 
           <h3>Analysis Breakdown</h3>
           <p>
