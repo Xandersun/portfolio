@@ -149,9 +149,9 @@ export function CapitalOneContent() {
             separate workflow or chat interface. Analysts could review AI feedback while editing the control
             description, eliminating the need to switch contexts or navigate away from their work.
           </p>
-          <figure className="reveal-img mx-auto mt-15 w-full max-w-[1100px]">
+          <figure className="reveal-img mx-auto mt-15 w-full max-w-[743px]">
             <AnalysisPlacementIllustration />
-            <figcaption className="mt-3 mb-16 pl-3 text-sm leading-normal text-[#64748B] [&_strong]:font-bold [&_strong]:text-[#334155]">
+            <figcaption className="mt-3 mb-16 text-[13px] leading-[1.5] text-[#64748B] [&_strong]:font-bold [&_strong]:text-[#334155]">
               <strong>Unified Workspace:</strong> Paired authoring directly with real-time AI evaluation so
               analysts could review feedback without leaving their workflow.
             </figcaption>
