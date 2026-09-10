@@ -150,15 +150,13 @@ export function AnalysisPlacementIllustration() {
               AI Analysis
             </h5>
 
-            <div className="mb-2 flex items-center justify-between">
-              <span className="text-[10px] font-bold tracking-wide uppercase" style={{ color: MUTED }}>
-                AI Confidence
-              </span>
-              <span className="text-[12px] font-semibold" style={{ color: NAVY }}>
-                Medium
-              </span>
-            </div>
-            <div className="mb-4 h-2 rounded-[2px]" style={{ background: SKELETON }} />
+            <span className="mb-2 text-[10px] font-bold tracking-wide uppercase" style={{ color: MUTED }}>
+              AI Confidence
+            </span>
+            <div className="mb-1.5 h-2 rounded-[2px]" style={{ background: SKELETON }} />
+            <span className="mb-5 text-[11px] font-semibold" style={{ color: MUTED }}>
+              Learn more
+            </span>
 
             <span className="mb-2 text-[10px] font-bold tracking-wide uppercase" style={{ color: MUTED }}>
               Report
@@ -175,7 +173,10 @@ export function AnalysisPlacementIllustration() {
             <span className="mt-4 mb-2 text-[10px] font-bold tracking-wide uppercase" style={{ color: MUTED }}>
               Attribution
             </span>
-            <div className="h-2 rounded-[2px]" style={{ background: SKELETON }} />
+            <div className="mb-1.5 w-full rounded-[2px]" style={{ background: SKELETON, height: 42 }} />
+            <span className="mb-5 text-[11px] font-semibold" style={{ color: MUTED }}>
+              Learn more
+            </span>
 
             <div className="flex-1" />
 
