@@ -51,7 +51,7 @@ const CASES: {
     company: "Monster Government Solutions",
     title: "Modernizing a live enterprise platform.",
     blurb:
-      "I modernized a mature case-management platform, simplifying the navigation, data-heavy screens, and complex forms while creating patterns we could reuse across the product.",
+      "Modernized a mature case-management platform, simplifying navigation, data-heavy screens, and complex forms while creating reusable patterns across the product.",
     href: "/case-studies/monster-modernization",
     statValue: "100+",
     statLabel: "Legacy pages updated",
@@ -65,7 +65,7 @@ const CASES: {
     company: "Capital One",
     title: "Designing human-in-the-loop AI for enterprise risk management.",
     blurb:
-      "I redesigned how analysts reviewed AI-generated findings, giving them the confidence, evidence, and reasoning behind each result before they made a decision.",
+      "Redesigned how analysts reviewed AI-generated findings, giving them the confidence, evidence, and reasoning behind each result before making a decision.",
     href: "/case-studies/capital-one",
     statValue: "5×",
     statLabel: "Estimated analyst review productivity",
@@ -87,7 +87,7 @@ images: [
     company: "Monster Government Solutions",
     title: "Building a recruiting platform from the ground up.",
     blurb:
-      "I redesigned the recruiting workflow to bring candidate information, validation, and handoffs between systems into one experience.",
+      "Built a recruiting platform that brought candidate information, validation, and handoffs between systems into one experience.",
     href: "/case-studies/monster-talent",
     statValue: "5+",
     statLabel: "Enterprise system handoffs connected",
@@ -101,7 +101,7 @@ images: [
     company: "Marriott International",
     title: "Turning a $10M+ customer journey into a funded opportunity.",
     blurb:
-      "I found an opportunity to simplify Bonvoy promotion registration, used the data to make the case for the redesign, and reduced the experience from six steps to two.",
+      "Simplified Bonvoy promotion registration from six steps to two, using product data to identify the opportunity and make the case for the redesign.",
     href: "/case-studies/marriott",
     statValue: "+30%",
     statLabel: "Promotional registrations",
