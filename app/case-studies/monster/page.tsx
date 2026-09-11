@@ -301,7 +301,7 @@ export default function PortfolioImportMonsterCaseStudyPage() {
           id="outcomes"
           heading="One architecture replaced a collection of competing patterns."
           tone="surface"
-          className="bg-[#F6F4F2] md:pt-[88px] md:pb-[96px]"
+          className="bg-[#F6F7F9] md:pt-[88px] md:pb-[96px]"
         >
           <p>
             The new hierarchy established clear responsibilities across platform, Customer-level, nested, and
@@ -370,7 +370,7 @@ export default function PortfolioImportMonsterCaseStudyPage() {
         </div>
       </main>
 
-      <CaseFooter background="#F6F4F2" />
+      <CaseFooter background="#F6F7F9" />
     </div>
   );
 }

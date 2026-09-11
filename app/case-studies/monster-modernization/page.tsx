@@ -119,7 +119,7 @@ export default function MonsterModernizationCaseStudyPage() {
           id="outcomes"
           heading="Each improvement made the next one easier."
           tone="surface"
-          className="bg-[#F6F4F2] md:pt-[88px] md:pb-[96px]"
+          className="bg-[#F6F7F9] md:pt-[88px] md:pb-[96px]"
         >
           <p>
             As useful patterns became reusable, the team didn&rsquo;t have to solve the same interaction problems from
@@ -135,7 +135,7 @@ export default function MonsterModernizationCaseStudyPage() {
         </div>
       </main>
 
-      <CaseFooter background="#F6F4F2" />
+      <CaseFooter background="#F6F7F9" />
     </div>
   );
 }

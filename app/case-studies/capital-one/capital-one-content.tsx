@@ -29,8 +29,6 @@
 
 import { useEffect, useState } from "react";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
-
 import { manrope } from "../../_components/fonts";
 import { useReveal } from "../../_components/use-reveal";
 import "../../_components/reveal.css";
@@ -38,8 +36,10 @@ import { PrimaryNav } from "../../_components/primary-nav";
 import { CaseToc } from "../../_components/case-toc";
 import { CaseHero } from "../../_components/case-hero";
 import { CaseSection } from "../../_components/case-section";
-import { RevealFigure } from "../../_components/reveal-figure";
-import { AnalysisPlacementIllustration } from "./_components/analysis-placement-illustration";
+import { AnalysisPlacementMockupAnimated } from "./_components/analysis-placement-illustration-animated";
+import { PanelStructureIllustration } from "./_components/panel-structure-illustration";
+import { PerCriterionAnalysisIllustration } from "./_components/per-criterion-analysis-illustration";
+import { ConfidenceDesignComparisonIllustration } from "./_components/confidence-design-comparison-illustration";
 import { CaseNavFooter } from "../../_components/case-nav-footer";
 import { CaseFooter } from "../../_components/case-footer";
 import { getCaseStudyNav } from "../../_components/case-study-order";
@@ -117,6 +117,7 @@ export function CapitalOneContent() {
           title="AI-Powered Decision Support"
           intro="Building the first human-in-the-loop AI feature for a risk management platform and defining reusable interaction patterns for future AI systems."
           pills={["Explainable AI", "AI Decision Support", "Enterprise Risk", "Cross-Functional Collaboration"]}
+          pillBackground="#FFFFFF"
           meta={[
             { label: "Role", value: "Sole UX Designer" },
             { label: "Domain", value: "Enterprise Financial Services, AI Risk Management" },
@@ -130,18 +131,52 @@ export function CapitalOneContent() {
             data quality at the point of entry. The work delivered a production decision-support feature and
             defined reusable AI interaction patterns to support consistency across future features.
           </p>
+
+          {/* Same disclaimer treatment as the Legacy case study's own "Note"
+              callout (app/case-studies/monster/page.tsx) — class names and
+              inline border styles copied verbatim, not approximated. Only
+              the top margin differs (24px here, per this case study's own
+              spacing request), the copy is Capital One's own, and (below)
+              `mx-auto` is dropped so the box left-aligns with the heading
+              and body copy instead of centering — Legacy's own layout
+              happens to want it centered in its own wrapper, but here that
+              centering just indented it 64.5px off the shared left edge.
+              Width behavior (the min(calc(100%-64px),1036px) formula) is
+              otherwise untouched.
+              The inner text is a <div>, not a <p> — this section's own
+              ambient prose styling (the [&_p]:text-lg / leading-[1.65] /
+              max-w-[760px] / text-[#334155] / mt-3 rules on its wrapper,
+              see capital-one-content.tsx's outer prose div) targets every
+              <p> and otherwise silently overrides this callout's own
+              text-base/leading-[1.5]/text-[#9A3412]/m-0 — inflating the
+              type, forcing an unwanted line wrap, and even overriding the
+              coral text color back to the page's default slate. Legacy's
+              own page has no such ambient rule, so its <p> never hits this;
+              here a <div> with the identical classes sidesteps it instead
+              of fighting it with !important. */}
+          <div
+            className="mt-[24px] mb-[22px] w-[min(calc(100%-64px),1036px)] max-w-[1036px] rounded-md bg-[#FFF0EB] px-[18px] py-4"
+            style={{ border: "1px solid rgba(255,87,51,0.28)", borderLeft: "5px solid #FF5733" }}
+          >
+            <div className="m-0 text-base leading-[1.5] text-[#9A3412]">
+              <strong>Note:</strong> Mockups shown here are simplified abstractions created to illustrate layout
+              strategy. They do not reflect final production code.
+            </div>
+          </div>
         </CaseSection>
 
         <CaseSection id="process-design" heading="Key Decisions" tone="paper" reveal>
           <h3>Analysis Placement</h3>
           <p>
             Analysts needed to write control descriptions that satisfied compliance requirements. We embedded AI
-            evaluation directly into the authoring experience, giving them immediate feedback while keeping review
-            and decision-making with the analyst.
+            evaluation directly into the authoring experience so they could review findings without leaving their
+            workflow, while keeping review and decision-making with the analyst.
           </p>
-          <figure className="reveal-img mx-auto mt-15 w-full max-w-[743px]">
-            <AnalysisPlacementIllustration />
-          </figure>
+          <div className="mt-10 w-full max-w-[1100px]">
+            <figure className="reveal-img mt-4 mb-16 w-full">
+              <AnalysisPlacementMockupAnimated />
+            </figure>
+          </div>
 
           <h3>Analysis Breakdown</h3>
           <p>
@@ -149,38 +184,14 @@ export function CapitalOneContent() {
             individual findings, and the information used to support the analysis.
           </p>
 
-          <Alert className="mx-auto mt-10 max-w-[800px] items-center gap-0 rounded-md border-[rgba(255,87,51,0.28)] border-l-[5px] border-l-[#FF5733] bg-[#FFF0EB] px-[18px] py-4">
-  <AlertDescription className="text-base leading-[1.5] text-[#9A3412]">
-    <strong className="font-bold text-[#9A3412]">Note:</strong> Mockups shown here are simplified
-    abstractions created to illustrate layout strategy. They do not reflect final production code.
-  </AlertDescription>
-</Alert>
-
-          {/* Source has a page-specific ".disclosure-note + figure.reveal-img { margin-top: 22px }" rule
-              (vs. RevealFigure's normal 60px). The wrapper's negative margin collapses with the figure's
-              own top margin to reproduce that 22px gap without a prop on the shared component.
-              max-w-[800px] matches this section's own established content-width convention (the
-              disclosure-note box and both comparison tables below already use the same 800px cap) —
-              without it, RevealFigure's mx-auto centers the image against the full section width
-              instead of this narrower text column, landing it well right of the paragraph/note box
-              above instead of sharing their left edge. */}
-         <div className="mx-auto mt-[-38px] max-w-[800px]">
-  <RevealFigure
-    reveal
-    src="/portfolio-import/images/capital-one/before-after-detected-placement.png"
-    alt="AI Analysis Panel annotated into four distinct sections"
-    caption={
-      <>
-        <strong>Analysis Structure:</strong> Organized AI context, findings, policy references, and user
-        feedback into distinct sections so analysts could scan the evaluation in a predictable order.
-      </>
-    }
-  />
-</div>
-
-          <p>
-            From there, analysts could open any individual finding to understand how the AI reached it.
-          </p>
+          {/* TEMPORARY — local-only HTML replacement candidate for the (now
+              removed) Panel Structure image. Not part of the case study;
+              safe to delete along with panel-structure-illustration.tsx. */}
+          <div className="mx-auto mt-10 mb-16 w-full max-w-[1100px]">
+            <figure className="reveal-img w-full">
+              <PanelStructureIllustration />
+            </figure>
+          </div>
 
           <h3>Explaining individual findings</h3>
           <p>
@@ -188,18 +199,15 @@ export function CapitalOneContent() {
             view exposed the confidence, conclusion, supporting evidence, reasoning, and underlying logic so
             analysts could evaluate the finding before deciding what to do next.
           </p>
-          <RevealFigure
-            reveal
-            src="/portfolio-import/images/capital-one/reasoning2.png"
-            alt="AI Conclusion and Explanation modal annotated with confidence, conclusion, evidence, reasoning, and logic"
-            caption={
-              <>
-                <strong>Explainable AI pattern:</strong> Each finding connected the model’s conclusion back to its
-                confidence, evidence, reasoning, and governing logic rather than presenting the AI output as an
-                answer to accept.
-              </>
-            }
-          />
+          {/* TEMPORARY — local-only HTML replacement candidate for the (now
+              removed) Per-Criterion Analysis image. Not part of the case
+              study; safe to delete along with
+              per-criterion-analysis-illustration.tsx. */}
+          <div className="mx-auto mt-10 mb-16 w-full max-w-[1100px]">
+            <figure className="reveal-img w-full">
+              <PerCriterionAnalysisIllustration />
+            </figure>
+          </div>
 
           <h3>AI Confidence Indicator</h3>
           <p>
@@ -207,18 +215,11 @@ export function CapitalOneContent() {
             analytical results already shown throughout the interface. High, Medium, and Low communicated the same
             information while keeping confidence as supporting context.
           </p>
-          <RevealFigure
-            reveal
-            src="/portfolio-import/images/capital-one/pattern-2-certainty-vs-analytics.png"
-            alt="Comparison between percentage-based and qualitative confidence indicators"
-            caption={
-              <>
-                <strong>Qualitative Confidence Framing:</strong> Replaced numerical percentage meters with
-                qualitative confidence tiers to prevent users from confusing model certainty with empirical data
-                metrics.
-              </>
-            }
-          />
+          <div className="mx-auto mt-10 mb-16 w-full max-w-[1100px]">
+            <figure className="reveal-img w-full">
+              <ConfidenceDesignComparisonIllustration />
+            </figure>
+          </div>
 
           <h3>Status Indicators</h3>
           <p>
@@ -226,25 +227,12 @@ export function CapitalOneContent() {
             whether each criterion was detected within the description.
           </p>
 
-          <RevealFigure
-            reveal
-            src="/portfolio-import/images/capital-one/pattern-1-scoping-disclaimer.png"
-            alt="AI Analysis card displaying status terminology and color semantics"
-            caption={
-              <>
-                <strong>Semantics:</strong> Terminology and colors communicate
-                <br />
-                findings without implying pass/fail judgment.
-              </>
-            }
-          />
-
           <h4 className="!mt-[58px]">Indicator Colors</h4>
           <p>
             Multiple color options were evaluated using established UI semantics to reinforce AI evaluation without
             implying success or failure.
           </p>
-          <CaseTable className="mt-[46px]">
+          <CaseTable className="mt-[46px] mx-0 max-w-[1000px]">
             <colgroup>
               <col style={{ width: "22%" }} />
               <col style={{ width: "60%" }} />
@@ -259,7 +247,7 @@ export function CapitalOneContent() {
               <CaseTableRow>
                 <CaseTableCell>Green / Red</CaseTableCell>
                 <CaseTableCell>Implied success and failure.</CaseTableCell>
-                <CaseTableCell />
+                <CaseTableCell className="text-muted-foreground">Rejected</CaseTableCell>
               </CaseTableRow>
               <CaseTableRow>
                 <CaseTableCell>Blue / Orange</CaseTableCell>
@@ -274,7 +262,7 @@ export function CapitalOneContent() {
             Multiple terminology options were evaluated to communicate AI evaluation without implying certainty or
             correctness.
           </p>
-          <CaseTable className="mt-[46px]">
+          <CaseTable className="mt-[46px] mx-0 max-w-[1000px]">
             <colgroup>
               <col style={{ width: "22%" }} />
               <col style={{ width: "60%" }} />
@@ -289,17 +277,17 @@ export function CapitalOneContent() {
               <CaseTableRow>
                 <CaseTableCell>Pass / Fail</CaseTableCell>
                 <CaseTableCell>Implied a final judgment.</CaseTableCell>
-                <CaseTableCell />
+                <CaseTableCell className="text-muted-foreground">Rejected</CaseTableCell>
               </CaseTableRow>
               <CaseTableRow>
                 <CaseTableCell>Present / Missing</CaseTableCell>
                 <CaseTableCell>Described the criterion rather than the evaluation.</CaseTableCell>
-                <CaseTableCell />
+                <CaseTableCell className="text-muted-foreground">Rejected</CaseTableCell>
               </CaseTableRow>
               <CaseTableRow>
                 <CaseTableCell>Found / Not Found</CaseTableCell>
                 <CaseTableCell>Resembled search results.</CaseTableCell>
-                <CaseTableCell />
+                <CaseTableCell className="text-muted-foreground">Rejected</CaseTableCell>
               </CaseTableRow>
               <CaseTableRow>
                 <CaseTableCell>Detected / Not Detected</CaseTableCell>
@@ -347,7 +335,7 @@ export function CapitalOneContent() {
       </main>
 
       <CaseFooter
-        background="#F6F4F2"
+        background="#F6F7F9"
         extraLinks={
           fromGaming ? (
             <>

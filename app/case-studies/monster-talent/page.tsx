@@ -236,7 +236,7 @@ export default function PortfolioImportMonsterTalentPage() {
           />
         </CaseSection>
 
-        <CaseSection id="product-ecosystem" heading="One product, built to fit a larger ecosystem." tone="surface" className="bg-[#F6F4F2]">
+        <CaseSection id="product-ecosystem" heading="One product, built to fit a larger ecosystem." tone="surface" className="bg-[#F6F7F9]">
           <p>
             The platform needed its own interaction patterns while remaining recognizable as part of
             Monster. I aligned typography, iconography, color application, and other visual
@@ -274,7 +274,7 @@ export default function PortfolioImportMonsterTalentPage() {
         </div>
       </main>
 
-      <CaseFooter background="#F6F4F2" />
+      <CaseFooter background="#F6F7F9" />
     </div>
   );
 }

@@ -336,7 +336,7 @@ export function MarriottContent() {
           heading="Results"
           tone="surface"
           reveal
-          className="border-t-0 bg-[#F6F4F2] md:pt-[88px] md:pb-[96px]"
+          className="border-t-0 bg-[#F6F7F9] md:pt-[88px] md:pb-[96px]"
         >
           <p>
             Members arriving through personalized promotion emails could now register immediately without
@@ -388,7 +388,7 @@ export function MarriottContent() {
         </div>
       </main>
 
-      <CaseFooter background="#F6F4F2" />
+      <CaseFooter background="#F6F7F9" />
     </div>
   );
 }

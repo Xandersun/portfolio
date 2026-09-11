@@ -14,7 +14,7 @@ interface CaseStudyOrderEntry {
 export const CASE_STUDY_ORDER: CaseStudyOrderEntry[] = [
   {
     href: "/case-studies/monster-modernization",
-    title: "Monster Government Solutions — Modernizing a Mature Enterprise Platform",
+    title: "Modernizing a Mature Enterprise Platform",
   },
   {
     href: "/case-studies/capital-one",
@@ -22,7 +22,7 @@ export const CASE_STUDY_ORDER: CaseStudyOrderEntry[] = [
   },
   {
     href: "/case-studies/monster-talent",
-    title: "Monster Government Solutions — Talent Intelligence Platform",
+    title: "Talent Intelligence Platform",
   },
   {
     href: "/case-studies/marriott",

@@ -21,7 +21,8 @@ export function CaseHero({
   intro,
   pills,
   meta,
-  background = "#F6F4F2",
+  background = "#F6F7F9",
+  pillBackground = "#F8F9FA",
 }: {
   tag?: string;
   title: ReactNode;
@@ -29,6 +30,7 @@ export function CaseHero({
   pills?: string[];
   meta: CaseMetaItem[];
   background?: string;
+  pillBackground?: string;
 }) {
   return (
     <header
@@ -51,7 +53,8 @@ export function CaseHero({
             <Badge
               key={pill}
               variant="outline"
-              className="h-auto rounded-md border-[#E2E8F0] bg-[#F8F9FA] px-3.5 py-2.5 text-sm font-semibold text-[#334155] shadow-none"
+              className="h-auto rounded-md border-[#E2E8F0] px-3.5 py-2.5 text-sm font-semibold text-[#334155] shadow-none"
+              style={{ background: pillBackground }}
             >
               {pill}
             </Badge>
