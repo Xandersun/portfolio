@@ -141,10 +141,6 @@ export function CapitalOneContent() {
           </p>
           <figure className="reveal-img mx-auto mt-15 w-full max-w-[743px]">
             <AnalysisPlacementIllustration />
-            <figcaption className="mt-3 mb-16 text-[13px] leading-[1.5] text-[#64748B] [&_strong]:font-bold [&_strong]:text-[#334155]">
-              <strong>Unified Workspace:</strong> Paired authoring directly with real-time AI evaluation so
-              analysts could review feedback without leaving their workflow.
-            </figcaption>
           </figure>
 
           <h3>Analysis Breakdown</h3>
