@@ -245,7 +245,7 @@ export default function PortfolioImportMonsterTalentPage() {
             Monster ecosystem.
           </p>
 
-          <figure className="mt-6 w-full max-w-[1100px] px-5 sm:px-8">
+          <figure className="mt-6 w-full max-w-[1100px] pr-10 sm:pr-16">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
               <img
                 src="/portfolio-import/images/monster/monster-com.png"
