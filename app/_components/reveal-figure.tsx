@@ -38,7 +38,7 @@ export function RevealFigure({
         alt={alt}
         className={cn("block h-auto w-auto max-w-full rounded-sm border border-[#E0E0E0] bg-white", imgClassName)}
       />
-      <figcaption className="table-caption caption-bottom mt-3 mb-16 pl-3 text-sm leading-normal text-[#64748B] [&_strong]:font-bold [&_strong]:text-[#334155]">
+      <figcaption className="table-caption caption-bottom mt-3 mb-16 text-sm leading-normal text-[#64748B] [&_strong]:font-bold [&_strong]:text-[#334155]">
         {caption}
       </figcaption>
     </figure>

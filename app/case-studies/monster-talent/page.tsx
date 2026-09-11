@@ -38,15 +38,6 @@ import { getCaseStudyNav } from "../../_components/case-study-order";
  * Known minor deltas vs. the pre-refactor pixel output, all a consequence
  * of the shared components being read-only (not modifiable as part of this
  * refactor):
- * - CaseHero always renders a pills row, but this page's hero has no pills
- *   in the source. An empty array is passed; the resulting empty row's
- *   top margin adds a small amount of extra vertical space in the hero
- *   that the original markup didn't have.
- * - RevealFigure's figcaption always includes 12px of left padding
- *   (matching the `.reveal-img` figcaption convention from case studies
- *   that do use the reveal script). This page's own `.case-visual`
- *   figcaptions had no left padding in the source CSS, so captions here
- *   sit ~12px further right than before.
  * - PrimaryNav renders a translucent `bg-white/95` nav background. This
  *   page's own nav override forced a fully opaque background
  *   (`var(--paper)`, no transparency). PrimaryNav has no background/
@@ -122,7 +113,8 @@ export default function PortfolioImportMonsterTalentPage() {
               architecture, interaction model, and shared experience patterns.
             </>
           }
-          pills={[]}
+          pills={["Enterprise Recruiting", "Platform Design", "Design Systems", "Cross-Functional Collaboration"]}
+          pillBackground="#FFFFFF"
           meta={[
             { label: "Role", value: "Lead UX Designer" },
             { label: "Domain", value: "Public Sector / GovTech" },
@@ -146,17 +138,23 @@ export default function PortfolioImportMonsterTalentPage() {
             define platform responsibilities, automated handoffs, and technical boundaries.
           </p>
 
-          <RevealFigure
-            src="/portfolio-import/images/monster/flow.png"
-            alt="Diagram showing recruiter roles, candidates, Talent Pool, Appian, and automated handoffs"
-            imgClassName="max-w-[800px]"
-            caption={
-              <>
-                <strong>System Alignment:</strong> Mapped roles, handoffs, and system boundaries before
-                defining the product experience.
-              </>
-            }
-          />
+          {/* Not RevealFigure: its figure is mx-auto (center-aligned), but
+              this image needs to sit flush with the main content column
+              at roughly the same width as the site's other standard
+              case-study images, not centered at a narrower width. Same
+              visual treatment (border/radius/bg, caption typography)
+              reproduced directly instead. */}
+          <figure className="mt-15 max-w-full">
+            <img
+              src="/portfolio-import/images/monster/flow.png"
+              alt="Diagram showing recruiter roles, candidates, Talent Pool, Appian, and automated handoffs"
+              className="block h-auto w-full max-w-[1100px] rounded-sm border border-[#E0E0E0] bg-white"
+            />
+            <figcaption className="mt-3 mb-16 max-w-[1100px] text-sm leading-normal text-[#64748B] [&_strong]:font-bold [&_strong]:text-[#334155]">
+              <strong>System Alignment:</strong> Mapped roles, handoffs, and system boundaries before
+              defining the product experience.
+            </figcaption>
+          </figure>
         </CaseSection>
 
         <CaseSection id="data-intake" heading="Fix messy data before it entered the system." tone="paper">
@@ -247,7 +245,7 @@ export default function PortfolioImportMonsterTalentPage() {
             Monster ecosystem.
           </p>
 
-          <figure className="mx-auto mt-6 w-full max-w-[1100px] px-5 sm:px-8">
+          <figure className="mt-6 w-full max-w-[1100px] px-5 sm:px-8">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
               <img
                 src="/portfolio-import/images/monster/monster-com.png"
