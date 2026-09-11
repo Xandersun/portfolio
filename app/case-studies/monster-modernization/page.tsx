@@ -84,6 +84,8 @@ export default function MonsterModernizationCaseStudyPage() {
           tag="Monster Government Solutions"
           title="Modernizing a mature enterprise platform."
           intro="Monster Government Solutions supported complex casework across Customer, Employer, Staff, and Event profiles. I worked on modernizing a mature enterprise product that had grown and changed over many years."
+          pills={["Enterprise Platforms", "Information Architecture", "Design Systems", "Platform Modernization"]}
+          pillBackground="#FFFFFF"
           meta={[
             { label: "Role", value: "UX Manager" },
             { label: "Domain", value: "Public Sector / GovTech" },

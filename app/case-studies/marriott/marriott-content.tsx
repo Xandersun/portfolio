@@ -120,6 +120,7 @@ export function MarriottContent() {
           title="Promotion Registration"
           intro="Marriott Bonvoy supported a complex ecosystem of loyalty experiences across rewards, stays, and personalized promotions. This case study focuses on promotion registration, where the existing experience introduced unnecessary friction into a high-value member journey."
           pills={["Product Discovery", "Funding Strategy", "Stakeholder Buy-In", "Enterprise Loyalty"]}
+          pillBackground="#FFFFFF"
           meta={[
             { label: "Role", value: "Senior UX Designer" },
             { label: "Timeline", value: "Feb 2016 – Jun 2020" },
