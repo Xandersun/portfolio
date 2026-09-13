@@ -259,7 +259,7 @@ function LivingSystemAccordion() {
 
   return (
     <div onKeyDownCapture={palette.onKeyDownCapture}>
-      <Accordion multiple value={openItems} onValueChange={setOpenItems} className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+      <Accordion multiple value={openItems} onValueChange={setOpenItems} className="rounded-lg border border-slate-200 bg-white">
         {capabilities.map((cap) => (
           <AccordionItem key={cap.id} value={cap.id} id={`living-system-${cap.id}`} className="border-slate-200 px-5 scroll-mt-4">
             <AccordionTrigger className="living-system-trigger -mx-5 cursor-pointer rounded-md px-5 py-3.5 text-slate-900 hover:no-underline [&_svg]:text-slate-600">
@@ -306,6 +306,19 @@ function LivingSystemAccordion() {
           height: auto !important;
         }
         #living-system-forms [data-slot="accordion-content"][data-open] > div {
+          height: auto !important;
+        }
+        /* Same fix as Forms above, for Navigation & Hierarchy — its own
+           sticky left nav (NavigationPanel's .nav-sidebar-panel) needs an
+           unbroken chain of overflow:visible ancestors up to the real page
+           scroll to stick correctly; a non-scrolling overflow:hidden
+           ancestor here would silently prevent that regardless of its own
+           height matching its content. */
+        #living-system-navigation [data-slot="accordion-content"][data-open] {
+          overflow: visible !important;
+          height: auto !important;
+        }
+        #living-system-navigation [data-slot="accordion-content"][data-open] > div {
           height: auto !important;
         }
         .states-align-fix > div {

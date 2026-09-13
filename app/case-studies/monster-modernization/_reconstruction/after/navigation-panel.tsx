@@ -213,6 +213,12 @@ const MENU_1_DESCENDANT_KEYS = new Set(["page-4", "page-5", "tabbed-page", "page
 
 const MENU_2_DESCENDANT_KEYS = new Set(["page-7", "page-8", "page-9", "page-10"]);
 
+// The site-wide sticky chrome above this page's content: PrimaryNav (68px)
+// + CaseToc (44px) = 112px — the same offset used elsewhere on this page
+// (e.g. FormsWorkflowsPanel's own STICKY_NAV_HEIGHT) for anything that
+// needs to stick below it rather than under it.
+const NAV_STICKY_TOP_OFFSET = 112;
+
 /** The four concise explanatory blocks shown on the Overview landing page. */
 const OVERVIEW_ITEMS: { title: string; description: string; icon: React.ReactNode }[] = [
   {
@@ -662,7 +668,7 @@ function RailIcon({
 function InteractionSpecSection() {
   return (
     <div style={{ marginTop: 40 }}>
-      <div style={{ color: "#0F172A", fontWeight: 700, fontSize: 18 }}>Documenting interaction behavior for engineers</div>
+      <div style={{ color: "#0F172A", fontWeight: 700, fontSize: 18 }}>Documenting nuance interactions for engineers</div>
       <p style={{ marginTop: 8, maxWidth: 640, fontSize: 15, lineHeight: 1.6, color: "#475569" }}>
         Some interaction details were difficult to discover through prototypes alone. I documented the underlying
         behavior so engineers had clear understandings for building each interaction.
@@ -848,7 +854,6 @@ export function NavigationPanel() {
       style={{
         display: "flex",
         flexDirection: "column",
-        overflow: "hidden",
         borderRadius: 8,
         fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
       }}
@@ -893,51 +898,67 @@ export function NavigationPanel() {
             flexShrink: 0,
             background: "#FFFFFF",
             borderRight: "1px solid #E2E8F0",
-            overflowX: "hidden",
             transition: "width 200ms ease-out",
           }}
         >
-          {collapsed ? (
-            <div
-              style={{
-                width: 64,
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 6,
-                paddingBlock: 12,
-              }}
-            >
-              {RAIL_ITEMS.map((item) => (
-                <RailIcon
-                  key={item.key}
-                  item={item}
-                  active={isRailItemActive(item)}
-                  selectedKey={selectedKey}
-                  onSelect={handleSelect}
-                  onHover={() => setHasHoveredRailIcon(true)}
-                  openKey={openKey}
-                  onRequestOpenHover={requestOpenHover}
-                  onRequestCloseHover={requestCloseHover}
-                  onRequestOpenNow={requestOpenNow}
-                  onRequestCloseNow={requestCloseNow}
+          {/* Sticky within .nav-sidebar-panel's own (flex-stretched, full
+              content-column-height) box — the panel above keeps its
+              existing full-height background/border exactly as before;
+              only this inner content is short and pinned, so it stays
+              visible while the much taller Overview content scrolls,
+              naturally releasing once the panel's own bottom edge (i.e.
+              the end of the Navigation section) is reached.
+
+              overflowX:hidden (clips menu labels during the width-collapse
+              animation) lives here, on the sticky element itself, rather
+              than on .nav-sidebar-panel above: overflow-x set to anything
+              other than visible forces overflow-y to compute as auto too
+              (a CSS quirk) — harmless on the sticky element's own box, but
+              on an ANCESTOR of it, that auto silently breaks sticky
+              entirely. An element's own overflow never blocks its own
+              stickiness, only an ancestor's does. */}
+          <div style={{ position: "sticky", top: NAV_STICKY_TOP_OFFSET, overflowX: "hidden" }}>
+            {collapsed ? (
+              <div
+                style={{
+                  width: 64,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 6,
+                  paddingBlock: 12,
+                }}
+              >
+                {RAIL_ITEMS.map((item) => (
+                  <RailIcon
+                    key={item.key}
+                    item={item}
+                    active={isRailItemActive(item)}
+                    selectedKey={selectedKey}
+                    onSelect={handleSelect}
+                    onHover={() => setHasHoveredRailIcon(true)}
+                    openKey={openKey}
+                    onRequestOpenHover={requestOpenHover}
+                    onRequestCloseHover={requestCloseHover}
+                    onRequestOpenNow={requestOpenNow}
+                    onRequestCloseNow={requestCloseNow}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="living-system-nav-menu" style={{ width: 220 }}>
+                <Menu
+                  mode="inline"
+                  items={NAV_MENU_ITEMS}
+                  selectedKeys={[selectedKey]}
+                  openKeys={menuOpenKeys}
+                  onOpenChange={handleMenuOpenChange}
+                  onClick={({ key }) => handleSelect(key)}
+                  style={{ border: "none", background: "transparent" }}
                 />
-              ))}
-            </div>
-          ) : (
-            <div className="living-system-nav-menu" style={{ width: 220, height: "100%" }}>
-              <Menu
-                mode="inline"
-                items={NAV_MENU_ITEMS}
-                selectedKeys={[selectedKey]}
-                openKeys={menuOpenKeys}
-                onOpenChange={handleMenuOpenChange}
-                onClick={({ key }) => handleSelect(key)}
-                style={{ border: "none", background: "transparent" }}
-              />
-            </div>
-          )}
+              </div>
+            )}
+          </div>
         </div>
 
         <div style={{ flex: 1, minWidth: 0, padding: 24, background: "#F8FAFC" }}>

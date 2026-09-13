@@ -46,18 +46,14 @@ const FONT_STACK = 'system-ui, -apple-system, "Inter", sans-serif';
 // The site-wide sticky chrome above this page's content: PrimaryNav (68px)
 // + CaseToc (44px) = 112px. Each form section below sets this as its own
 // scroll-margin-top so clicking a right-rail nav item leaves the section
-// heading visible underneath that chrome instead of hidden behind it.
+// heading visible below that chrome instead of hidden behind it.
 //
 // This accordion panel (Base UI's Accordion.Panel, needed for its own
-// collapse/expand animation) is itself `overflow: hidden`, which makes it a
-// scroll container in its own right. scrollIntoView() walks every scrollable
-// ancestor between the target and the document, applying the target's own
-// scroll-margin-top at each step — so for a section nested inside this
-// panel, the 112px margin gets applied twice (once scrolling the panel,
-// once scrolling the page), landing 224px below the chrome instead of 112.
-// A plain top-level section outside the accordion (no intermediate
-// overflow:hidden ancestor) does not double this way. Halving the value
-// here is what keeps the actual rendered clearance at the real 112px.
+// collapse/expand animation) is `overflow-hidden` by default, but the
+// living-system-forms scoped override (living-system-section.tsx) forces it
+// to `overflow: visible` while open, so it's never an intermediate scroll
+// container — scrollIntoView() applies this scroll-margin-top exactly once,
+// against the real page scroll, same as a plain top-level section.
 const STICKY_NAV_HEIGHT = 112;
 
 const SECTIONS = [
@@ -337,7 +333,7 @@ export function FormsWorkflowsPanel() {
 
   return (
     <div
-      style={{ fontFamily: FONT_STACK, display: "grid", gridTemplateColumns: "minmax(0, 680px) minmax(0, 420px)", justifyContent: "start", gap: 32, alignItems: "start" }}
+      style={{ fontFamily: FONT_STACK, display: "grid", gridTemplateColumns: "minmax(0, 680px) minmax(0, 420px)", justifyContent: "start", gap: 32, alignItems: "stretch" }}
       className="forms-workflows-columns"
     >
       <div style={{ minWidth: 0 }}>
@@ -378,7 +374,7 @@ export function FormsWorkflowsPanel() {
         )}
 
         {/* General */}
-        <section id="form-section-general" data-section-id="general" ref={registerSection("general")} style={{ scrollMarginTop: STICKY_NAV_HEIGHT / 2, marginBottom: 28 }}>
+        <section id="form-section-general" data-section-id="general" ref={registerSection("general")} style={{ scrollMarginTop: STICKY_NAV_HEIGHT, marginBottom: 28 }}>
           <SectionHeading>General</SectionHeading>
           <p style={{ fontSize: 15, lineHeight: "22px", color: "#334155", marginBottom: 16, maxWidth: 560 }}>
             Conventional required fields with deferred validation — errors appear on blur or submit, not on every
@@ -460,7 +456,7 @@ export function FormsWorkflowsPanel() {
         </section>
 
         {/* Configuration */}
-        <section id="form-section-configuration" data-section-id="configuration" ref={registerSection("configuration")} style={{ scrollMarginTop: STICKY_NAV_HEIGHT / 2, marginBottom: 28 }}>
+        <section id="form-section-configuration" data-section-id="configuration" ref={registerSection("configuration")} style={{ scrollMarginTop: STICKY_NAV_HEIGHT, marginBottom: 28 }}>
           <SectionHeading>Configuration</SectionHeading>
           <p style={{ fontSize: 15, lineHeight: "22px", color: "#334155", marginBottom: 16, maxWidth: 560 }}>
             Changing Configuration Type can reveal a dependent field with its own valid values — and changing it
@@ -509,7 +505,7 @@ export function FormsWorkflowsPanel() {
         </section>
 
         {/* Items */}
-        <section id="form-section-items" data-section-id="items" ref={registerSection("items")} style={{ scrollMarginTop: STICKY_NAV_HEIGHT / 2, marginBottom: 28 }}>
+        <section id="form-section-items" data-section-id="items" ref={registerSection("items")} style={{ scrollMarginTop: STICKY_NAV_HEIGHT, marginBottom: 28 }}>
           <SectionHeading>Items</SectionHeading>
           <p style={{ fontSize: 15, lineHeight: "22px", color: "#334155", marginBottom: 16, maxWidth: 560 }}>
             A repeatable list of simple form rows — add, edit, remove, and reorder with Move Up / Move Down, no
@@ -571,7 +567,7 @@ export function FormsWorkflowsPanel() {
         </section>
 
         {/* Additional Details */}
-        <section id="form-section-additional-details" data-section-id="additional-details" ref={registerSection("additional-details")} style={{ scrollMarginTop: STICKY_NAV_HEIGHT / 2, marginBottom: 28 }}>
+        <section id="form-section-additional-details" data-section-id="additional-details" ref={registerSection("additional-details")} style={{ scrollMarginTop: STICKY_NAV_HEIGHT, marginBottom: 28 }}>
           <SectionHeading>Additional Details</SectionHeading>
           <p style={{ fontSize: 15, lineHeight: "22px", color: "#334155", marginBottom: 16, maxWidth: 560 }}>
             Optional information stays out of the way by default — a plain show/hide control reveals more, rather
@@ -664,7 +660,13 @@ export function FormsWorkflowsPanel() {
           outlined) rather than the nav items' plain text-link treatment, so
           the two stay visually distinct. */}
       <div style={{ minWidth: 0 }}>
-        <div style={{ border: "1px solid #E2E8F0", borderRadius: 10, background: "#FFFFFF", padding: 16 }}>
+        {/* Sticky within this grid column's own box — the column is
+            already stretched to the left form column's full height (CSS
+            Grid's default align-items:stretch), so this shorter card has
+            room to float as the much taller form scrolls, releasing
+            naturally once the column's own bottom edge (the end of the
+            Forms section) is reached. */}
+        <div style={{ position: "sticky", top: STICKY_NAV_HEIGHT, border: "1px solid #E2E8F0", borderRadius: 10, background: "#FFFFFF", padding: 16 }}>
           <div style={{ paddingBottom: 12, marginBottom: 12, borderBottom: "1px solid #E2E8F0" }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "#0F172A" }}>On This Page</div>
           </div>
