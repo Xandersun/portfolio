@@ -359,12 +359,12 @@ export default function PortfolioImportMonsterCaseStudyPage() {
             prev={{
               href: "/case-studies/monster-talent",
               eyebrow: "← Previous",
-              title: "Monster Government Solutions — Talent Intelligence Platform",
+              title: "Talent Intelligence Platform",
             }}
             next={{
               href: "/case-studies/marriott",
               eyebrow: "Next →",
-              title: "Marriott Bonvoy — Promotion Registration",
+              title: "Promotion Registration",
             }}
           />
         </div>

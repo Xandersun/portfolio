@@ -18,7 +18,7 @@ export const CASE_STUDY_ORDER: CaseStudyOrderEntry[] = [
   },
   {
     href: "/case-studies/capital-one",
-    title: "Capital One — AI-Powered Decision Support",
+    title: "AI-Powered Decision Support",
   },
   {
     href: "/case-studies/monster-talent",
@@ -26,7 +26,7 @@ export const CASE_STUDY_ORDER: CaseStudyOrderEntry[] = [
   },
   {
     href: "/case-studies/marriott",
-    title: "Marriott Bonvoy — Promotion Registration",
+    title: "Promotion Registration",
   },
 ];
 

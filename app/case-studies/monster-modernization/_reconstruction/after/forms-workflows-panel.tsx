@@ -4,8 +4,9 @@
  * Forms & Workflows — a single-page, non-linear enterprise form workspace.
  * Deliberately NOT a wizard/stepper: every section (General, Configuration,
  * Items, Additional Details, Review & Submit) is part of one continuous
- * scrollable page, reachable in any order via sticky in-page section
- * navigation with scroll-spy, rather than being gated behind "Next" steps.
+ * scrollable page, reachable in any order via the right-side section
+ * navigation panel with scroll-spy, rather than being gated behind "Next"
+ * steps.
  *
  * Demonstrates, with real interaction rather than static markup:
  *  - deferred validation (blur/submit, not every keystroke) with inline
@@ -23,12 +24,13 @@
  *  - a Review & Submit recap at the end of the same page (not a separate
  *    step) with per-section Edit links back into the form
  *
- * Reuses the shared ThingsToTry component (things-to-try.tsx) for its
- * checklist, the same automatic-completion pattern as Navigation &
- * Hierarchy and Data & Tables, and the shared useSandboxNotify toast
- * queue is intentionally NOT used here — per spec this workspace's own
- * quiet inline status line/error summary is the feedback mechanism, not
- * a toast.
+ * The right-side rail is the ONLY section navigation in this demo (General,
+ * Configuration, Items, Additional Details, driven by the
+ * scrollToSection/activeSection scroll-spy state), with Save as draft /
+ * Save actions side by side at its bottom. The shared useSandboxNotify
+ * toast queue is intentionally NOT used here — per spec this workspace's
+ * own quiet inline status line/error summary is the feedback mechanism,
+ * not a toast.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -38,9 +40,25 @@ import { CheckCircleOutlined, DownOutlined, UpOutlined } from "@ant-design/icons
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 
 import { Textarea } from "@/components/ui/textarea";
-import { ThingsToTry, type ThingsToTryItem } from "./things-to-try";
 
 const FONT_STACK = 'system-ui, -apple-system, "Inter", sans-serif';
+
+// The site-wide sticky chrome above this page's content: PrimaryNav (68px)
+// + CaseToc (44px) = 112px. Each form section below sets this as its own
+// scroll-margin-top so clicking a right-rail nav item leaves the section
+// heading visible underneath that chrome instead of hidden behind it.
+//
+// This accordion panel (Base UI's Accordion.Panel, needed for its own
+// collapse/expand animation) is itself `overflow: hidden`, which makes it a
+// scroll container in its own right. scrollIntoView() walks every scrollable
+// ancestor between the target and the document, applying the target's own
+// scroll-margin-top at each step — so for a section nested inside this
+// panel, the 112px margin gets applied twice (once scrolling the panel,
+// once scrolling the page), landing 224px below the chrome instead of 112.
+// A plain top-level section outside the accordion (no intermediate
+// overflow:hidden ancestor) does not double this way. Halving the value
+// here is what keeps the actual rendered clearance at the real 112px.
+const STICKY_NAV_HEIGHT = 112;
 
 const SECTIONS = [
   { id: "general", label: "General" },
@@ -203,14 +221,6 @@ export function FormsWorkflowsPanel() {
   const [submitted, setSubmitted] = useState(false);
   const [errorSummaryOpen, setErrorSummaryOpen] = useState(false);
 
-  // ---- "Things to try" completion flags — each is set once by a real
-  // interaction and never reset for the rest of the session. ----
-  const [hasTriggeredValidationError, setHasTriggeredValidationError] = useState(false);
-  const [hasRevealedConditional, setHasRevealedConditional] = useState(false);
-  const [hasTestedDependency, setHasTestedDependency] = useState(false);
-  const [hasAddedItem, setHasAddedItem] = useState(false);
-  const [hasJumpedToIssue, setHasJumpedToIssue] = useState(false);
-
   // ---- Sticky section nav + scroll-spy ----
   const [activeSection, setActiveSection] = useState<SectionId>("general");
   const sectionRefs = useRef<Partial<Record<SectionId, HTMLElement>>>({});
@@ -242,11 +252,6 @@ export function FormsWorkflowsPanel() {
     el.querySelector<HTMLElement>("input, select, textarea, button, [tabindex]")?.focus();
   }
 
-  function jumpToIssue(fieldId: string) {
-    focusField(fieldId);
-    setHasJumpedToIssue(true);
-  }
-
   const generalErrors = useMemo(() => validateGeneral(general), [general]);
 
   const issues = useMemo(() => {
@@ -259,10 +264,6 @@ export function FormsWorkflowsPanel() {
         message: generalErrors[key]!,
       }));
   }, [generalErrors, submitAttempted, generalTouched]);
-
-  useEffect(() => {
-    if (issues.length > 0) setHasTriggeredValidationError(true);
-  }, [issues.length]);
 
   function displayedError(key: keyof GeneralErrors) {
     return submitAttempted || generalTouched[key] ? generalErrors[key] : undefined;
@@ -284,21 +285,16 @@ export function FormsWorkflowsPanel() {
     if (previous === "advanced" && advancedMode) {
       setAdvancedMode("");
       setDependencyNotice("Advanced Mode was cleared — it isn't available for this configuration type.");
-      setHasTestedDependency(true);
     } else if (previous === "custom" && customRule) {
       setCustomRule("");
       setDependencyNotice("Custom Rule was cleared — it isn't available for this configuration type.");
-      setHasTestedDependency(true);
     } else {
       setDependencyNotice(null);
     }
-
-    if (next !== "standard") setHasRevealedConditional(true);
   }
 
   function handleAddItem() {
     setItems((prev) => [...prev, { id: `item-${nextItemId.current++}`, name: "", type: "Text", value: "" }]);
-    setHasAddedItem(true);
   }
 
   function handleRemoveItem(id: string) {
@@ -331,39 +327,6 @@ export function FormsWorkflowsPanel() {
     }
     setSubmitted(true);
   }
-
-  const CHECKLIST: ThingsToTryItem[] = [
-    {
-      key: "trigger-error",
-      label: "Trigger a validation error",
-      description: "Leave a required field incomplete, then move on or submit the form.",
-      complete: hasTriggeredValidationError,
-    },
-    {
-      key: "reveal-conditional",
-      label: "Reveal a conditional field",
-      description: "Change a configuration option to reveal additional information.",
-      complete: hasRevealedConditional,
-    },
-    {
-      key: "test-dependency",
-      label: "Test a dependency",
-      description: "Change a parent selection after choosing a dependent value.",
-      complete: hasTestedDependency,
-    },
-    {
-      key: "add-item",
-      label: "Add an item",
-      description: "Add another item to the repeatable Items section.",
-      complete: hasAddedItem,
-    },
-    {
-      key: "jump-to-issue",
-      label: "Jump to an issue",
-      description: "Use the error summary to navigate directly to a field that needs attention.",
-      complete: hasJumpedToIssue,
-    },
-  ];
 
   const registerSection = (id: SectionId) => (el: HTMLElement | null) => {
     if (el) sectionRefs.current[id] = el;
@@ -401,7 +364,7 @@ export function FormsWorkflowsPanel() {
                 <button
                   key={issue.id}
                   type="button"
-                  onClick={() => jumpToIssue(issue.id)}
+                  onClick={() => focusField(issue.id)}
                   style={{ display: "flex", justifyContent: "space-between", gap: 8, textAlign: "left", background: "none", border: "none", padding: "4px 0", cursor: "pointer" }}
                 >
                   <span style={{ fontSize: 14, color: "#991B1B" }}>
@@ -414,35 +377,8 @@ export function FormsWorkflowsPanel() {
           </div>
         )}
 
-        {/* Sticky section nav */}
-        <div style={{ position: "sticky", top: 0, zIndex: 5, background: "#FFFFFF", borderBottom: "1px solid #E2E8F0", marginBottom: 20 }}>
-          <div style={{ display: "flex", gap: 4, paddingBlock: 8 }}>
-            {SECTIONS.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => scrollToSection(s.id)}
-                aria-current={activeSection === s.id ? "true" : undefined}
-                className="form-section-nav-item"
-                style={{
-                  padding: "6px 12px",
-                  borderRadius: 6,
-                  fontSize: 14,
-                  fontWeight: 600,
-                  border: "none",
-                  cursor: "pointer",
-                  background: activeSection === s.id ? "#F0FDFA" : "transparent",
-                  color: activeSection === s.id ? "#115E59" : "#475569",
-                }}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* General */}
-        <section id="form-section-general" data-section-id="general" ref={registerSection("general")} style={{ scrollMarginTop: 56, marginBottom: 28 }}>
+        <section id="form-section-general" data-section-id="general" ref={registerSection("general")} style={{ scrollMarginTop: STICKY_NAV_HEIGHT / 2, marginBottom: 28 }}>
           <SectionHeading>General</SectionHeading>
           <p style={{ fontSize: 15, lineHeight: "22px", color: "#334155", marginBottom: 16, maxWidth: 560 }}>
             Conventional required fields with deferred validation — errors appear on blur or submit, not on every
@@ -524,7 +460,7 @@ export function FormsWorkflowsPanel() {
         </section>
 
         {/* Configuration */}
-        <section id="form-section-configuration" data-section-id="configuration" ref={registerSection("configuration")} style={{ scrollMarginTop: 56, marginBottom: 28 }}>
+        <section id="form-section-configuration" data-section-id="configuration" ref={registerSection("configuration")} style={{ scrollMarginTop: STICKY_NAV_HEIGHT / 2, marginBottom: 28 }}>
           <SectionHeading>Configuration</SectionHeading>
           <p style={{ fontSize: 15, lineHeight: "22px", color: "#334155", marginBottom: 16, maxWidth: 560 }}>
             Changing Configuration Type can reveal a dependent field with its own valid values — and changing it
@@ -573,7 +509,7 @@ export function FormsWorkflowsPanel() {
         </section>
 
         {/* Items */}
-        <section id="form-section-items" data-section-id="items" ref={registerSection("items")} style={{ scrollMarginTop: 56, marginBottom: 28 }}>
+        <section id="form-section-items" data-section-id="items" ref={registerSection("items")} style={{ scrollMarginTop: STICKY_NAV_HEIGHT / 2, marginBottom: 28 }}>
           <SectionHeading>Items</SectionHeading>
           <p style={{ fontSize: 15, lineHeight: "22px", color: "#334155", marginBottom: 16, maxWidth: 560 }}>
             A repeatable list of simple form rows — add, edit, remove, and reorder with Move Up / Move Down, no
@@ -635,7 +571,7 @@ export function FormsWorkflowsPanel() {
         </section>
 
         {/* Additional Details */}
-        <section id="form-section-additional-details" data-section-id="additional-details" ref={registerSection("additional-details")} style={{ scrollMarginTop: 56, marginBottom: 28 }}>
+        <section id="form-section-additional-details" data-section-id="additional-details" ref={registerSection("additional-details")} style={{ scrollMarginTop: STICKY_NAV_HEIGHT / 2, marginBottom: 28 }}>
           <SectionHeading>Additional Details</SectionHeading>
           <p style={{ fontSize: 15, lineHeight: "22px", color: "#334155", marginBottom: 16, maxWidth: 560 }}>
             Optional information stays out of the way by default — a plain show/hide control reveals more, rather
@@ -719,18 +655,70 @@ export function FormsWorkflowsPanel() {
         </section>
       </div>
 
+      {/* Right rail — the sole section navigation panel for this form (the
+          old sticky in-page nav above the form was removed; these labels
+          now live only here), driven by the same scrollToSection/
+          activeSection scroll-spy state. "On This Page" + its divider label
+          the nav items below; Save actions sit in their own bordered group
+          below a second divider and use real button styling (filled/
+          outlined) rather than the nav items' plain text-link treatment, so
+          the two stay visually distinct. */}
       <div style={{ minWidth: 0 }}>
-        <ThingsToTry items={CHECKLIST} />
+        <div style={{ border: "1px solid #E2E8F0", borderRadius: 10, background: "#FFFFFF", padding: 16 }}>
+          <div style={{ paddingBottom: 12, marginBottom: 12, borderBottom: "1px solid #E2E8F0" }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#0F172A" }}>On This Page</div>
+          </div>
+          <nav aria-label="Form sections" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            {SECTIONS.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => scrollToSection(s.id)}
+                aria-current={activeSection === s.id ? "true" : undefined}
+                className="form-side-nav-item"
+                style={{
+                  textAlign: "left",
+                  padding: "8px 10px",
+                  borderRadius: 6,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  border: "none",
+                  cursor: "pointer",
+                  background: activeSection === s.id ? "#F0FDFA" : "transparent",
+                  color: activeSection === s.id ? "#115E59" : "#475569",
+                }}
+              >
+                {s.label}
+              </button>
+            ))}
+          </nav>
+
+          <div style={{ display: "flex", flexDirection: "row", gap: 8, marginTop: 16, paddingTop: 16, borderTop: "1px solid #E2E8F0" }}>
+            <button type="button" className="form-side-action form-side-action--secondary" style={{ flex: 1, minWidth: 0, height: 40, paddingInline: 20, borderRadius: 8, border: "1px solid #0f766e", background: "#FFFFFF", color: "#0f766e", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+              Save as draft
+            </button>
+            <button type="button" className="form-side-action form-side-action--primary" style={{ flex: 1, minWidth: 0, height: 40, paddingInline: 20, borderRadius: 8, border: "none", background: "#0f766e", color: "#FFFFFF", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+              Save
+            </button>
+          </div>
+        </div>
       </div>
 
       <style jsx global>{`
-        .form-section-nav-item:hover {
+        .form-side-nav-item:hover {
           background-color: #f1f5f9 !important;
           color: #0f172a !important;
         }
-        .form-section-nav-item:focus-visible {
+        .form-side-nav-item:focus-visible,
+        .form-side-action:focus-visible {
           outline: none !important;
           box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #0d9488 !important;
+        }
+        .form-side-action--primary:hover {
+          background-color: #115e59 !important;
+        }
+        .form-side-action--secondary:hover {
+          background-color: #f0fdfa !important;
         }
         .issue-summary-toggle:focus-visible {
           outline: none !important;

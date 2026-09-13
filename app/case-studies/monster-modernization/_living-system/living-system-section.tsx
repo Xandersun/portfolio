@@ -291,6 +291,23 @@ function LivingSystemAccordion() {
         .living-system-trigger[aria-expanded="true"]:hover {
           background-color: #e9eef5 !important;
         }
+        /* Forms & Workflows is the tallest panel, and its content can grow
+           further through interaction (validation errors, conditional
+           fields, added items) after the shared Accordion's own open
+           animation first measures its height. That animation locks the
+           panel to a one-time h-(--accordion-panel-height) measurement
+           instead of tracking later growth — exactly the "scrolling inside
+           the accordion" shape Frame's own docstring above says this
+           section should never have. Scoped to just this one accordion
+           item (by id), only while open, so every other item's own
+           collapse/expand animation and height handling stay untouched. */
+        #living-system-forms [data-slot="accordion-content"][data-open] {
+          overflow: visible !important;
+          height: auto !important;
+        }
+        #living-system-forms [data-slot="accordion-content"][data-open] > div {
+          height: auto !important;
+        }
         .states-align-fix > div {
           max-width: 1280px !important;
         }

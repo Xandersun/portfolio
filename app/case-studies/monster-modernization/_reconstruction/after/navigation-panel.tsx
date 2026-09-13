@@ -217,22 +217,22 @@ const MENU_2_DESCENDANT_KEYS = new Set(["page-7", "page-8", "page-9", "page-10"]
 const OVERVIEW_ITEMS: { title: string; description: string; icon: React.ReactNode }[] = [
   {
     title: "Collapsible Navigation",
-    description: "Collapse the sidebar to create more workspace.",
+    description: "Collapsed to create more workspace.",
     icon: <MenuIcon className="size-4" />,
   },
   {
     title: "Nested Navigation",
-    description: "Group related destinations without showing every level.",
+    description: "Grouped destinations to shorten the sidebar.",
     icon: <ListTree className="size-4" />,
   },
   {
-    title: "Deeper Navigation",
-    description: "Use local tabs for related views within a page.",
+    title: "Tabbed Navigation",
+    description: "Organized related views within nested pages.",
     icon: <Layers className="size-4" />,
   },
   {
-    title: "Persistent Context",
-    description: "Keep the application shell visible as users move.",
+    title: "Sticky Nav",
+    description: "Kept primary navigation visible while users moved through the page.",
     icon: <Pin className="size-4" />,
   },
 ];
@@ -662,10 +662,10 @@ function RailIcon({
 function InteractionSpecSection() {
   return (
     <div style={{ marginTop: 40 }}>
-      <div style={{ color: "#0F172A", fontWeight: 700, fontSize: 18 }}>Defining the interaction behavior</div>
+      <div style={{ color: "#0F172A", fontWeight: 700, fontSize: 18 }}>Documenting interaction behavior for engineers</div>
       <p style={{ marginTop: 8, maxWidth: 640, fontSize: 15, lineHeight: 1.6, color: "#475569" }}>
-        The collapsible navigation introduced interaction details that needed to be defined clearly for
-        implementation, including when menus open, when they close, and how users move between levels.
+        Some interaction details were difficult to discover through prototypes alone. I documented the underlying
+        behavior so engineers had clear understandings for building each interaction.
       </p>
       <div style={{ marginTop: 20 }}>
         {INTERACTION_SPEC_ITEMS.map((rule, index) => (
@@ -848,7 +848,6 @@ export function NavigationPanel() {
       style={{
         display: "flex",
         flexDirection: "column",
-        height: 650,
         overflow: "hidden",
         borderRadius: 8,
         fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
@@ -941,13 +940,13 @@ export function NavigationPanel() {
           )}
         </div>
 
-        <div style={{ flex: 1, minWidth: 0, padding: 24, overflowY: "auto", background: "#F8FAFC" }}>
+        <div style={{ flex: 1, minWidth: 0, padding: 24, background: "#F8FAFC" }}>
           {isOverview ? (
             <div>
-              <div style={{ color: "#0F172A", fontWeight: 700, fontSize: 20 }}>Navigation System Overview</div>
+              <div style={{ color: "#0F172A", fontWeight: 700, fontSize: 20 }}>A navigation system built for complexity</div>
               <Text type="secondary" style={{ display: "block", marginTop: 4, fontSize: 16, maxWidth: 520, lineHeight: 1.5, color: "#334155" }}>
-                Explore how the application handles global navigation, nested destinations, and a compact icon rail
-                for high-density interfaces.
+                The new navigation separated global, nested, and page-level navigation so the platform could support
+                deeper workflows without overwhelming the sidebar.
               </Text>
 
               <PatternsSection heading="Navigation patterns" items={OVERVIEW_ITEMS} checklist={CHECKLIST} />
