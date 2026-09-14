@@ -219,6 +219,12 @@ const MENU_2_DESCENDANT_KEYS = new Set(["page-7", "page-8", "page-9", "page-10"]
 // needs to stick below it rather than under it.
 const NAV_STICKY_TOP_OFFSET = 112;
 
+// How far above the demo's top-level frame a sticky-nav selection scrolls
+// to — deliberately more than NAV_STICKY_TOP_OFFSET so the destination
+// lands with visible context above it (the accordion heading/intro) rather
+// than flush against the sticky chrome.
+const DEMO_SCROLL_OFFSET = 220;
+
 /** The four concise explanatory blocks shown on the Overview landing page. */
 const OVERVIEW_ITEMS: { title: string; description: string; icon: React.ReactNode }[] = [
   {
@@ -735,6 +741,13 @@ export function NavigationPanel() {
   const openTimerRef = useRef<number | null>(null);
   const closeTimerRef = useRef<number | null>(null);
 
+  // The demo's own top-level frame (top bar + sidebar + content) — every
+  // sticky-nav selection below scrolls back to exactly this element,
+  // regardless of how far the user had scrolled into the previous
+  // destination's content. scroll-margin-top matches NAV_STICKY_TOP_OFFSET
+  // so the site-wide sticky chrome (PrimaryNav + CaseToc) never covers it.
+  const demoRef = useRef<HTMLDivElement | null>(null);
+
   // Collapsing swaps the full inline menu (which shows Menu 1's children as
   // extra rows) for the compact icon rail (six top-level icons only) — the
   // two layouts don't share row positions, so a cursor that stays put
@@ -806,6 +819,21 @@ export function NavigationPanel() {
   const handleSelect = (key: string) => {
     setSelectedKey(key);
     if (key === "tabbed-page") setHasOpenedTabbedPage(true);
+    // Selecting a destination swaps the main content pane in place — the
+    // page's own scroll position is left exactly where it was, so without
+    // this the user can land partway down (or entirely past) a much
+    // shorter destination than the one they were just scrolled into.
+    // Deferred one tick so it runs against the newly selected content's
+    // rendered height, not the previous page's. A manual scrollTo (rather
+    // than scrollIntoView) so the landing offset is DEMO_SCROLL_OFFSET, not
+    // scroll-margin-top's NAV_STICKY_TOP_OFFSET — DEMO_SCROLL_OFFSET is
+    // already larger than the sticky chrome, so it still clears it.
+    window.setTimeout(() => {
+      const el = demoRef.current;
+      if (!el) return;
+      const targetY = el.getBoundingClientRect().top + window.scrollY - DEMO_SCROLL_OFFSET;
+      window.scrollTo({ top: Math.max(targetY, 0), behavior: "smooth" });
+    }, 0);
   };
 
   const handleToggleCollapsed = () => {
@@ -851,11 +879,13 @@ export function NavigationPanel() {
 
   return (
     <div
+      ref={demoRef}
       style={{
         display: "flex",
         flexDirection: "column",
         borderRadius: 8,
         fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
+        scrollMarginTop: NAV_STICKY_TOP_OFFSET,
       }}
     >
       <div

@@ -28,6 +28,7 @@
  */
 
 import { useEffect, useState } from "react";
+import { Info } from "lucide-react";
 
 import { manrope } from "../../_components/fonts";
 import { useReveal } from "../../_components/use-reveal";
@@ -132,35 +133,31 @@ export function CapitalOneContent() {
             defined reusable AI interaction patterns to support consistency across future features.
           </p>
 
-          {/* Same disclaimer treatment as the Legacy case study's own "Note"
-              callout (app/case-studies/monster/page.tsx) — class names and
-              inline border styles copied verbatim, not approximated. Only
-              the top margin differs (24px here, per this case study's own
-              spacing request), the copy is Capital One's own, and (below)
-              `mx-auto` is dropped so the box left-aligns with the heading
-              and body copy instead of centering — Legacy's own layout
-              happens to want it centered in its own wrapper, but here that
-              centering just indented it 64.5px off the shared left edge.
-              Width behavior (the min(calc(100%-64px),1036px) formula) is
-              otherwise untouched.
+          {/* Same blue informational callout treatment as the Monster
+              case study's "Interactive recreation" note
+              (app/case-studies/monster-modernization/_living-system/
+              living-system-section.tsx) — class names copied verbatim, not
+              approximated, replacing this section's former coral warning
+              treatment. The outer margin/width (mt-[24px] mb-[22px], the
+              min(calc(100%-64px),1036px) formula, and `mx-auto` being
+              dropped so the box left-aligns with the heading and body copy
+              instead of centering) is this case study's own layout, not
+              part of the reused callout style, so it's untouched.
               The inner text is a <div>, not a <p> — this section's own
               ambient prose styling (the [&_p]:text-lg / leading-[1.65] /
               max-w-[760px] / text-[#334155] / mt-3 rules on its wrapper,
               see capital-one-content.tsx's outer prose div) targets every
               <p> and otherwise silently overrides this callout's own
-              text-base/leading-[1.5]/text-[#9A3412]/m-0 — inflating the
+              text-sm/leading-relaxed/text-[#1E40AF]/m-0 — inflating the
               type, forcing an unwanted line wrap, and even overriding the
-              coral text color back to the page's default slate. Legacy's
-              own page has no such ambient rule, so its <p> never hits this;
-              here a <div> with the identical classes sidesteps it instead
-              of fighting it with !important. */}
-          <div
-            className="mt-[24px] mb-[22px] w-[min(calc(100%-64px),1036px)] max-w-[1036px] rounded-md bg-[#FFF0EB] px-[18px] py-4"
-            style={{ border: "1px solid rgba(255,87,51,0.28)", borderLeft: "5px solid #FF5733" }}
-          >
-            <div className="m-0 text-base leading-[1.5] text-[#9A3412]">
-              <strong>Note:</strong> Mockups shown here are simplified abstractions created to illustrate layout
-              strategy. They do not reflect final production code.
+              blue text color back to the page's default slate. A <div>
+              with the identical classes sidesteps it instead of fighting
+              it with !important. */}
+          <div className="mt-[24px] mb-[22px] flex w-[min(calc(100%-64px),1036px)] max-w-[1036px] items-start gap-3 rounded-[8px] border border-[#BFDBFE] bg-[#EFF6FF] px-5 py-4 shadow-none">
+            <Info aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-[#2563EB]" />
+            <div className="m-0 text-sm leading-relaxed text-[#1E40AF]">
+              Mockups shown here are simplified abstractions created to illustrate layout strategy. They do not
+              reflect final production code.
             </div>
           </div>
         </CaseSection>

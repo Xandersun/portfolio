@@ -48,6 +48,7 @@
 
 import {
   History as HistoryIcon,
+  Info,
   Palette,
   PanelsTopLeft,
   RefreshCw,
@@ -122,15 +123,16 @@ const CAPABILITY_META: { id: string; label: string; icon: React.ReactNode }[] = 
 /**
  * The command palette's only actions are "Go to X" jumps to this
  * section's six real destinations — expanding the target accordion item
- * (if collapsed) and scrolling it into view. Every command is real and
- * verifiable; there are no placeholder/fake actions.
+ * if it's collapsed. Every command is real and verifiable; there are no
+ * placeholder/fake actions. This intentionally does not scroll: the only
+ * interaction that scrolls the page is picking a destination inside the
+ * Navigation & Hierarchy demo's own sticky sidebar (see NavigationPanel's
+ * handleSelect in ../_reconstruction/after/navigation-panel.tsx), which
+ * scrolls only that demo's own frame into view — never the page at large.
  */
 function useGlobalCommandPalette(openItems: string[], setOpenItems: (items: string[]) => void) {
   const goTo = (id: string) => {
     if (!openItems.includes(id)) setOpenItems([...openItems, id]);
-    window.setTimeout(() => {
-      document.getElementById(`living-system-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 0);
   };
 
   const paletteActions: PaletteAction[] = CAPABILITY_META.map((cap) => ({
@@ -259,7 +261,12 @@ function LivingSystemAccordion() {
 
   return (
     <div onKeyDownCapture={palette.onKeyDownCapture}>
-      <Accordion multiple value={openItems} onValueChange={setOpenItems} className="rounded-lg border border-slate-200 bg-white">
+      <Accordion
+        multiple
+        value={openItems}
+        onValueChange={setOpenItems}
+        className="rounded-lg border border-slate-200 bg-white"
+      >
         {capabilities.map((cap) => (
           <AccordionItem key={cap.id} value={cap.id} id={`living-system-${cap.id}`} className="border-slate-200 px-5 scroll-mt-4">
             <AccordionTrigger className="living-system-trigger -mx-5 cursor-pointer rounded-md px-5 py-3.5 text-slate-900 hover:no-underline [&_svg]:text-slate-600">
@@ -349,16 +356,25 @@ export function LivingSystemSection() {
         id="living-system"
         heading="See the system in action."
         tone="surface"
-        className="border-t-0"
+        className="border-t-0 pb-8 md:pb-8"
       >
         <p>
-          The interactive examples below show how common enterprise patterns can work together across a mature
-          product. They demonstrate the design approach
-          and interaction patterns, rather than reproducing the historical Monster interface.
+          The examples below highlight modernization patterns I introduced across the platform, including updated
+          navigation, data-dense workflows, and more consistent interaction patterns.
         </p>
       </CaseSection>
 
       <div className="w-full bg-[#F8F9FA] px-4 pb-16 sm:px-8 md:px-[max(2rem,calc((100vw-1180px)/2))] md:pb-24">
+        <div
+          className="mb-6 flex items-start gap-3 rounded-[8px] px-5 py-4 shadow-none"
+          style={{ background: "#EFF6FF", border: "1px solid #BFDBFE" }}
+        >
+          <Info aria-hidden="true" className="mt-0.5 size-5 shrink-0" style={{ color: "#2563EB" }} />
+          <p className="text-sm leading-relaxed font-normal" style={{ color: "#1E40AF" }}>
+            This interactive recreation was built in React using shadcn/ui and AG Grid, with Figma, Claude, and
+            Gemini in the design and development workflow.
+          </p>
+        </div>
         <LdsLightEmbed>
           <LivingSystemAccordion />
         </LdsLightEmbed>
