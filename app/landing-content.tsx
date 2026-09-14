@@ -187,7 +187,7 @@ export function LandingContent() {
               </p>
 
               <ul className="mt-7 flex flex-wrap gap-2.5">
-                {["Enterprise SaaS", "B2B & B2G", "Data-Dense UI", "Complex Workflows", "Design Systems", "Legacy Modernization"].map(
+                {["Enterprise Platforms", "Explainable AI", "End-to-End Design", "Data-Dense UI", "Design Systems", "Legacy Modernization"].map(
                   (pill) => (
                     <li key={pill}>
                       <Badge
