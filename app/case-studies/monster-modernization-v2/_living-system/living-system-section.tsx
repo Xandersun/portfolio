@@ -354,13 +354,15 @@ export function LivingSystemSection() {
     <>
       <CaseSection
         id="living-system"
-        heading="See the system in action."
+        heading="Core Architectural Patterns & Interactive Sandboxes"
         tone="surface"
         className="border-t-0 pb-8 md:pb-8"
       >
         <p>
-          The examples below highlight modernization patterns I introduced across the platform, including updated
-          navigation, data-dense workflows, and more consistent interaction patterns.
+          Each sandbox below is a working React build (shadcn/ui and AG Grid), not a static mockup, so the key
+          trade-offs could be tested before engineering committed: tiered navigation over a deep menu tree to protect
+          workspace width, a dense data grid over horizontal scrolling, and inline audit history over blocking
+          full-screen popups.
         </p>
       </CaseSection>
 
@@ -371,8 +373,8 @@ export function LivingSystemSection() {
         >
           <Info aria-hidden="true" className="mt-0.5 size-5 shrink-0" style={{ color: "#2563EB" }} />
           <p className="text-sm leading-relaxed font-normal" style={{ color: "#1E40AF" }}>
-            This interactive recreation was built in React using shadcn/ui and AG Grid, with Figma, Claude, and
-            Gemini in the design and development workflow.
+            Interactive Sandboxes: Built in React using shadcn/ui and AG Grid to stress-test state machine logic,
+            keyboard navigation, and data density prior to engineering sprint allocation.
           </p>
         </div>
         <LdsLightEmbed>
