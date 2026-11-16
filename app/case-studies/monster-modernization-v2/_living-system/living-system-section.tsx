@@ -1,97 +1,46 @@
 "use client";
 
 /**
- * "See the system in action" — the curated,
- * fixed set of Living Design System capabilities the Interactive
- * Reconstruction demonstrates: Navigation & Hierarchy, Data & Tables,
- * Forms & Workflows, History & Change Tracking, Design System, and
- * Components (Component States + Component Variants). Patterns like Live
- * Telemetry, a standalone Density Toggle, Split-Screen Inspector,
- * Keyboard Shortcuts, and Case Workspace exist elsewhere in
- * /portfolio-v2/lds but are deliberately not part of this set.
+ * Interactive prototypes for the v2 case study, unbundled from the former
+ * single six-item accordion so each one sits directly under the narrative
+ * section it supports:
  *
- * Saved Views and Command Palette are deliberately NOT standalone
- * accordions here: Saved Views is folded into Data & Tables' own toolbar
- * (see after-caseload.tsx) as one more ordinary grid capability, and
- * Command Palette is a global capability of this whole section (see
- * below) rather than a single feature to expand and look at.
+ *   02 Platform Architecture  → NavigationPrototype (single view, open)
+ *   03 Caseload & Compliance  → CaseloadPrototype (Data & Tables /
+ *                               Forms & Workflows / History & Change Tracking)
+ *   04 Design System          → DesignSystemPrototype (Design System /
+ *                               Components)
  *
- * Every expanded panel renders a REAL component: either a local light-mode
- * fork of a real /portfolio-v2/lds page (DesignSystemPanel, StatesPanel,
- * AuditTrailPanel — forked only so each can render inside this section's
- * light theme, and in AuditTrailPanel's case with a demo-appropriate row
- * count, without touching the real /portfolio-v2/lds route it's forked
- * from), or a real piece of the Monster reconstruction itself
- * (NavigationPanel, AfterCaseload, FormsWorkflowsPanel, VariantsPanel).
- * Nothing here is a screenshot or a redrawn imitation.
+ * Every view renders a REAL component — a light-mode fork of a real
+ * /portfolio-v2/lds page (DesignSystemPanel, StatesPanel, AuditTrailPanel)
+ * or a real piece of the Monster reconstruction (NavigationPanel,
+ * AfterCaseload, FormsWorkflowsPanel, VariantsPanel). Nothing is a
+ * screenshot.
  *
- * One shared LdsLightEmbed wraps the whole accordion (a light-theme
- * counterpart to how components/portfolio-v2/living-design-system-section.tsx
- * embeds a single LDS module elsewhere in portfolio-v2) so every panel
- * shares one antd scope/theme instead of several redundant ones. shadcn
- * Accordion defaults to unmounting collapsed panels (keepMounted: false),
- * so the heavier panels (AG Grid, etc.) only mount once actually expanded.
- *
- * The command palette is global to this section (not the real browser
- * window) via a keydown-capture listener on the section's own outer
- * wrapper rather than a `window` listener — Cmd/Ctrl+K works no matter
- * which panel has focus WITHIN this reconstruction, without hijacking the
- * shortcut on the rest of the portfolio page the way the real LDS's own
- * CommandPaletteProvider (a `window` listener) would. It reuses
- * MonsterCommandPalette (already built for the reconstruction,
- * scoped-input only) with its own small action list that jumps to one of
- * this section's six top-level destinations — not the real action
- * registry (lib/portfolio-v2/actions.tsx), whose actions navigate to
- * actual /portfolio-v2/lds routes and include case-management vocabulary
- * that doesn't belong in this generic reconstruction.
+ * Each prototype renders OUTSIDE CaseSection (CaseSection styles every
+ * descendant p/ul/li/h3/h4, which would restyle the prototypes' own
+ * markup), in a band that continues the section's background. Only the
+ * active tab is mounted, so the heavier views (AG Grid etc.) mount on
+ * demand. No ancestor here sets overflow, so NavigationPanel's sticky
+ * sidebar keeps an unbroken path to the page scroll.
  */
 
-import {
-  History as HistoryIcon,
-  Info,
-  Palette,
-  PanelsTopLeft,
-  RefreshCw,
-  Table2,
-  Workflow,
-} from "lucide-react";
+import { useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { Typography } from "antd";
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-
-import { CaseSection } from "../../../_components/case-section";
 import { AfterCaseload } from "../_reconstruction/after/after-caseload";
 import { AuditTrailPanel } from "../_reconstruction/after/audit-trail-panel";
-import { MonsterCommandPalette, useMonsterCommandPalette, type PaletteAction } from "../_reconstruction/after/command-palette";
 import { DesignSystemPanel } from "../_reconstruction/after/design-system-panel";
 import { FormsWorkflowsPanel } from "../_reconstruction/after/forms-workflows-panel";
 import { NavigationPanel } from "../_reconstruction/after/navigation-panel";
 import { StatesPanel } from "../_reconstruction/after/states-panel";
 import { VariantsPanel } from "../_reconstruction/after/variants-panel";
 import { LdsLightEmbed } from "./lds-light-embed";
-import { useState } from "react";
 
 const { Title, Paragraph } = Typography;
 
-/**
- * A visual frame only — no fixed height, no overflow/scroll. Content
- * grows naturally and the page itself scrolls, per the "one page scroll,
- * not page scroll + scrolling inside accordions" requirement.
- */
-function Frame({ children }: { children: React.ReactNode }) {
-  return <div style={{ borderRadius: 8, border: "1px solid #E2E8F0", background: "#FFFFFF" }}>{children}</div>;
-}
-
-/**
- * Standardized expanded-accordion introduction — heading + one-sentence
- * description, matching the Title level={2} / Paragraph type="secondary"
- * treatment the real /portfolio-v2/lds pages (Audit Trail, Design System,
- * Saved Views, States, Variants) already use for their own page intros.
- * Only used here for the panels built directly in this file; the real LDS
- * page imports already carry this exact pattern natively, so they're left
- * untouched rather than wrapped a second time.
- */
-function AccordionIntro({ heading, description }: { heading: string; description: string }) {
+/** Heading + one-sentence description inside a view (matches the real LDS page intros). */
+function ViewIntro({ heading, description }: { heading: string; description: string }) {
   return (
     <>
       <Title level={2} style={{ marginBottom: 4 }}>
@@ -104,230 +53,106 @@ function AccordionIntro({ heading, description }: { heading: string; description
   );
 }
 
-interface Capability {
+/* ------------------------------------------------------------------ */
+/* Shared frame                                                        */
+/* ------------------------------------------------------------------ */
+
+interface View {
   id: string;
-  icon: React.ReactNode;
-  title: string;
-  content: React.ReactNode;
+  label: string;
+  render: () => ReactNode;
 }
 
-const CAPABILITY_META: { id: string; label: string; icon: React.ReactNode }[] = [
-  { id: "navigation", label: "Navigation & Hierarchy", icon: <PanelsTopLeft className="size-4" /> },
-  { id: "data", label: "Data & Tables", icon: <Table2 className="size-4" /> },
-  { id: "forms", label: "Forms & Workflows", icon: <Workflow className="size-4" /> },
-  { id: "history", label: "History & Change Tracking", icon: <HistoryIcon className="size-4" /> },
-  { id: "design-system", label: "Design System", icon: <Palette className="size-4" /> },
-  { id: "components", label: "Components", icon: <RefreshCw className="size-4" /> },
-];
+function PrototypeFrame({
+  id,
+  prompt,
+  views,
+  defaultView,
+  tone = "paper",
+}: {
+  id: string;
+  prompt: string;
+  views: View[];
+  defaultView?: string;
+  tone?: "paper" | "surface";
+}) {
+  const [active, setActive] = useState(defaultView ?? views[0].id);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const current = views.find((v) => v.id === active) ?? views[0];
+  const tabbed = views.length > 1;
 
-/**
- * The command palette's only actions are "Go to X" jumps to this
- * section's six real destinations — expanding the target accordion item
- * if it's collapsed. Every command is real and verifiable; there are no
- * placeholder/fake actions. This intentionally does not scroll: the only
- * interaction that scrolls the page is picking a destination inside the
- * Navigation & Hierarchy demo's own sticky sidebar (see NavigationPanel's
- * handleSelect in ../_reconstruction/after/navigation-panel.tsx), which
- * scrolls only that demo's own frame into view — never the page at large.
- */
-function useGlobalCommandPalette(openItems: string[], setOpenItems: (items: string[]) => void) {
-  const goTo = (id: string) => {
-    if (!openItems.includes(id)) setOpenItems([...openItems, id]);
+  const onTabKeyDown = (e: KeyboardEvent, index: number) => {
+    const delta = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+    if (!delta) return;
+    e.preventDefault();
+    const next = (index + delta + views.length) % views.length;
+    setActive(views[next].id);
+    tabRefs.current[next]?.focus();
   };
 
-  const paletteActions: PaletteAction[] = CAPABILITY_META.map((cap) => ({
-    id: `goto-${cap.id}`,
-    label: `Go to ${cap.label}`,
-    category: "Navigation",
-    icon: cap.icon,
-    run: () => goTo(cap.id),
-  }));
-
-  return useMonsterCommandPalette(paletteActions);
-}
-
-/**
- * Rendered as a child of LdsEmbed (not by LivingSystemSection directly) —
- * hooks like useSandboxNotify only resolve against a provider that is
- * actually an ancestor in the render tree, not one appearing later in a
- * sibling's JSX, so all the panel-building logic that depends on it has
- * to live inside this inner component.
- */
-function LivingSystemAccordion() {
-  const [openItems, setOpenItems] = useState<string[]>(["navigation"]);
-  const palette = useGlobalCommandPalette(openItems, setOpenItems);
-  const capabilities: Capability[] = [
-    {
-      id: "navigation",
-      icon: <PanelsTopLeft className="size-5" />,
-      title: "Navigation & Hierarchy",
-      content: (
-        <>
-          <div style={{ padding: "24px 24px 0" }}>
-            <AccordionIntro
-              heading="Navigation & Hierarchy"
-              description="Clear levels of navigation keep global tools, record context, and deeper workflows distinct."
-            />
-          </div>
-          <div style={{ padding: "0 24px 24px" }}>
-            <Frame>
-              <NavigationPanel />
-            </Frame>
-          </div>
-        </>
-      ),
-    },
-    {
-      id: "data",
-      icon: <Table2 className="size-5" />,
-      title: "Data & Tables",
-      content: (
-        <Frame>
-          <div style={{ paddingTop: 36, paddingInline: 24, paddingBottom: 24 }}>
-            <AccordionIntro
-              heading="Data & Tables"
-              description="Dense operational data designed for fast scanning, filtering, and action — with saved views, filtering, and column configuration built into one toolbar."
-            />
-            <AfterCaseload onSelect={() => {}} />
-          </div>
-        </Frame>
-      ),
-    },
-    {
-      id: "forms",
-      icon: <Workflow className="size-5" />,
-      title: "Forms & Workflows",
-      content: (
-        <Frame>
-          <div style={{ padding: 24 }}>
-            <AccordionIntro
-              heading="Forms & Workflows"
-              description="Complex forms need to support validation, dependencies, repeated information, and recovery without forcing users through a rigid sequence."
-            />
-            <FormsWorkflowsPanel />
-          </div>
-        </Frame>
-      ),
-    },
-    {
-      id: "history",
-      icon: <HistoryIcon className="size-5" />,
-      title: "History & Change Tracking",
-      content: (
-        <Frame>
-          <div style={{ padding: "24px 24px 0" }}>
-            <AccordionIntro
-              heading="History & Change Tracking"
-              description="Who changed something, what changed, when, and the before/after state — traceability as an interaction problem, not a single feature checkbox."
-            />
-          </div>
-          <AuditTrailPanel />
-        </Frame>
-      ),
-    },
-    {
-      id: "design-system",
-      icon: <Palette className="size-5" />,
-      title: "Design System",
-      content: (
-        <Frame>
-          <DesignSystemPanel />
-        </Frame>
-      ),
-    },
-    {
-      id: "components",
-      icon: <RefreshCw className="size-5" />,
-      title: "Components",
-      content: (
-        <Frame>
-          <div style={{ padding: "24px 24px 0" }}>
-            <Title level={2} style={{ marginBottom: 4 }}>
-              Components
-            </Title>
-            <p style={{ fontSize: 16, lineHeight: "24px", color: "#334155", marginBottom: 24, maxWidth: 760 }}>
-              Consistent states and variants make system behavior predictable across the product.
-            </p>
-          </div>
-          <div className="states-align-fix">
-            <StatesPanel />
-          </div>
-          <div style={{ borderTop: "1px solid #E2E8F0" }} />
-          <VariantsPanel />
-        </Frame>
-      ),
-    },
-  ];
-
   return (
-    <div onKeyDownCapture={palette.onKeyDownCapture}>
-      <Accordion
-        multiple
-        value={openItems}
-        onValueChange={setOpenItems}
-        className="rounded-lg border border-slate-200 bg-white"
-      >
-        {capabilities.map((cap) => (
-          <AccordionItem key={cap.id} value={cap.id} id={`living-system-${cap.id}`} className="border-slate-200 px-5 scroll-mt-4">
-            <AccordionTrigger className="living-system-trigger -mx-5 cursor-pointer rounded-md px-5 py-3.5 text-slate-900 hover:no-underline [&_svg]:text-slate-600">
-              <div className="flex flex-1 items-center gap-4">
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-600">
-                  {cap.icon}
-                </div>
-                <div className="min-w-0 flex-1 font-semibold text-slate-900">{cap.title}</div>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="pb-6">
-              <div className="mt-2">{cap.content}</div>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
-      <MonsterCommandPalette open={palette.open} onClose={() => palette.setOpen(false)} actions={palette.actions} />
+    <div
+      id={id}
+      className={`w-full scroll-mt-[112px] px-4 pb-16 sm:px-8 md:px-[max(2rem,calc((100vw-1180px)/2))] md:pb-24 ${
+        tone === "surface" ? "bg-[#F8F9FA]" : "bg-white"
+      }`}
+    >
+      <div className="border border-[#E2E8F0] bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04),0_12px_32px_-16px_rgba(15,23,42,0.12)]">
+        <div className="border-b border-[#E2E8F0] bg-[#F8FAFC] px-4 pt-4 sm:px-6">
+          <div className={`flex flex-wrap items-baseline gap-x-3 gap-y-1 ${tabbed ? "pb-3" : "pb-4"}`}>
+            <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#FF5733]">
+              Interactive Prototype
+            </span>
+            <span className="text-[14px] leading-[1.5] text-[#475569]">{prompt}</span>
+          </div>
+
+          {tabbed && (
+            <div role="tablist" aria-label="Prototype views" className="-mb-px flex gap-6 overflow-x-auto">
+              {views.map((view, i) => {
+                const selected = view.id === current.id;
+                return (
+                  <button
+                    key={view.id}
+                    ref={(el) => {
+                      tabRefs.current[i] = el;
+                    }}
+                    type="button"
+                    role="tab"
+                    id={`${id}-tab-${view.id}`}
+                    aria-selected={selected}
+                    aria-controls={`${id}-panel`}
+                    tabIndex={selected ? 0 : -1}
+                    onClick={() => setActive(view.id)}
+                    onKeyDown={(e) => onTabKeyDown(e, i)}
+                    className={`shrink-0 cursor-pointer whitespace-nowrap border-b-2 pb-2.5 text-[14px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0F172A] ${
+                      selected
+                        ? "border-[#FF5733] text-[#0F172A]"
+                        : "border-transparent text-[#64748B] hover:text-[#0F172A]"
+                    }`}
+                  >
+                    {view.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div
+          id={`${id}-panel`}
+          // Below md, wide views (audit table, nav demo) scroll inside the frame instead of the page.
+          // Desktop keeps overflow visible so NavigationPanel's sticky sidebar still tracks the page scroll.
+          className="max-md:relative max-md:overflow-x-auto"
+          role={tabbed ? "tabpanel" : undefined}
+          aria-labelledby={tabbed ? `${id}-tab-${current.id}` : undefined}
+        >
+          <LdsLightEmbed>
+            <div key={current.id}>{current.render()}</div>
+          </LdsLightEmbed>
+        </div>
+      </div>
+
       <style jsx global>{`
-        .living-system-trigger {
-          background-color: #f1f5f9 !important;
-          transition: background-color 0.15s ease;
-        }
-        .living-system-trigger:hover {
-          background-color: #e9eef5 !important;
-        }
-        .living-system-trigger[aria-expanded="true"] {
-          background-color: #f1f5f9 !important;
-        }
-        .living-system-trigger[aria-expanded="true"]:hover {
-          background-color: #e9eef5 !important;
-        }
-        /* Forms & Workflows is the tallest panel, and its content can grow
-           further through interaction (validation errors, conditional
-           fields, added items) after the shared Accordion's own open
-           animation first measures its height. That animation locks the
-           panel to a one-time h-(--accordion-panel-height) measurement
-           instead of tracking later growth — exactly the "scrolling inside
-           the accordion" shape Frame's own docstring above says this
-           section should never have. Scoped to just this one accordion
-           item (by id), only while open, so every other item's own
-           collapse/expand animation and height handling stay untouched. */
-        #living-system-forms [data-slot="accordion-content"][data-open] {
-          overflow: visible !important;
-          height: auto !important;
-        }
-        #living-system-forms [data-slot="accordion-content"][data-open] > div {
-          height: auto !important;
-        }
-        /* Same fix as Forms above, for Navigation & Hierarchy — its own
-           sticky left nav (NavigationPanel's .nav-sidebar-panel) needs an
-           unbroken chain of overflow:visible ancestors up to the real page
-           scroll to stick correctly; a non-scrolling overflow:hidden
-           ancestor here would silently prevent that regardless of its own
-           height matching its content. */
-        #living-system-navigation [data-slot="accordion-content"][data-open] {
-          overflow: visible !important;
-          height: auto !important;
-        }
-        #living-system-navigation [data-slot="accordion-content"][data-open] > div {
-          height: auto !important;
-        }
         .states-align-fix > div {
           max-width: 1280px !important;
         }
@@ -335,52 +160,134 @@ function LivingSystemAccordion() {
           font-size: 20px !important;
           line-height: 28px !important;
         }
-        .living-system-trigger:focus-visible {
-          outline: none !important;
-          box-shadow: inset 0 0 0 2px #0d9488 !important;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .living-system-trigger {
-            transition: none !important;
-          }
-        }
       `}</style>
     </div>
   );
 }
 
-export function LivingSystemSection() {
-  return (
-    <>
-      <CaseSection
-        id="living-system"
-        heading="Core Architectural Patterns & Interactive Sandboxes"
-        tone="surface"
-        className="border-t-0 pb-8 md:pb-8"
-      >
-        <p>
-          Each sandbox below is a working React build (shadcn/ui and AG Grid), not a static mockup, so the key
-          trade-offs could be tested before engineering committed: tiered navigation over a deep menu tree to protect
-          workspace width, a dense data grid over horizontal scrolling, and inline audit history over blocking
-          full-screen popups.
-        </p>
-      </CaseSection>
+/* ------------------------------------------------------------------ */
+/* Views                                                               */
+/* ------------------------------------------------------------------ */
 
-      <div className="w-full bg-[#F8F9FA] px-4 pb-16 sm:px-8 md:px-[max(2rem,calc((100vw-1180px)/2))] md:pb-24">
-        <div
-          className="mb-6 flex items-start gap-3 rounded-[8px] px-5 py-4 shadow-none"
-          style={{ background: "#EFF6FF", border: "1px solid #BFDBFE" }}
-        >
-          <Info aria-hidden="true" className="mt-0.5 size-5 shrink-0" style={{ color: "#2563EB" }} />
-          <p className="text-sm leading-relaxed font-normal" style={{ color: "#1E40AF" }}>
-            Interactive Sandboxes: Built in React using shadcn/ui and AG Grid to stress-test state machine logic,
-            keyboard navigation, and data density prior to engineering sprint allocation.
-          </p>
-        </div>
-        <LdsLightEmbed>
-          <LivingSystemAccordion />
-        </LdsLightEmbed>
+const NAVIGATION_VIEW: View = {
+  id: "navigation",
+  label: "Navigation & Hierarchy",
+  render: () => (
+    <div style={{ padding: 24 }}>
+      <ViewIntro
+        heading="Navigation & Hierarchy"
+        description="Clear levels of navigation keep global tools, record context, and deeper workflows distinct."
+      />
+      <div style={{ borderRadius: 8, border: "1px solid #E2E8F0", background: "#FFFFFF" }}>
+        <NavigationPanel />
       </div>
+    </div>
+  ),
+};
+
+const DATA_VIEW: View = {
+  id: "data",
+  label: "Data & Tables",
+  render: () => (
+    <div style={{ padding: 24 }}>
+      <ViewIntro
+        heading="Data & Tables"
+        description="Dense operational data designed for fast scanning, filtering, and action — with saved views, filtering, and column configuration built into one toolbar."
+      />
+      <AfterCaseload onSelect={() => {}} />
+    </div>
+  ),
+};
+
+const FORMS_VIEW: View = {
+  id: "forms",
+  label: "Forms & Workflows",
+  render: () => (
+    <div style={{ padding: 24 }}>
+      <ViewIntro
+        heading="Forms & Workflows"
+        description="Complex forms need to support validation, dependencies, repeated information, and recovery without forcing users through a rigid sequence."
+      />
+      <FormsWorkflowsPanel />
+    </div>
+  ),
+};
+
+const HISTORY_VIEW: View = {
+  id: "history",
+  label: "History & Change Tracking",
+  render: () => (
+    <>
+      <div style={{ padding: "24px 24px 0" }}>
+        <ViewIntro
+          heading="History & Change Tracking"
+          description="Who changed something, what changed, when, and the before/after state — traceability as an interaction problem, not a single feature checkbox."
+        />
+      </div>
+      <AuditTrailPanel />
     </>
+  ),
+};
+
+const DESIGN_SYSTEM_VIEW: View = {
+  id: "design-system",
+  label: "Design System",
+  render: () => <DesignSystemPanel />,
+};
+
+const COMPONENTS_VIEW: View = {
+  id: "components",
+  label: "Components",
+  render: () => (
+    <>
+      <div style={{ padding: "24px 24px 0" }}>
+        <Title level={2} style={{ marginBottom: 4 }}>
+          Components
+        </Title>
+        <p style={{ fontSize: 16, lineHeight: "24px", color: "#334155", marginBottom: 24, maxWidth: 760 }}>
+          Consistent states and variants make system behavior predictable across the product.
+        </p>
+      </div>
+      <div className="states-align-fix">
+        <StatesPanel />
+      </div>
+      <div style={{ borderTop: "1px solid #E2E8F0" }} />
+      <VariantsPanel />
+    </>
+  ),
+};
+
+/* ------------------------------------------------------------------ */
+/* Section embeds                                                      */
+/* ------------------------------------------------------------------ */
+
+export function NavigationPrototype() {
+  return (
+    <PrototypeFrame
+      id="prototype-navigation"
+      prompt="Explore the unified workspace shell and 6 consolidated Customer Profile groups."
+      views={[NAVIGATION_VIEW]}
+    />
+  );
+}
+
+export function CaseloadPrototype() {
+  return (
+    <PrototypeFrame
+      id="prototype-caseload"
+      prompt="Switch views to inspect dense caseload grids, progressive forms, and in-place audit diffs."
+      views={[DATA_VIEW, FORMS_VIEW, HISTORY_VIEW]}
+      defaultView="data"
+    />
+  );
+}
+
+export function DesignSystemPrototype() {
+  return (
+    <PrototypeFrame
+      id="prototype-design-system"
+      prompt="Switch views to inspect the design system foundations and component states and variants."
+      views={[DESIGN_SYSTEM_VIEW, COMPONENTS_VIEW]}
+    />
   );
 }

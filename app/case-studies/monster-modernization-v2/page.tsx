@@ -12,12 +12,12 @@ import { CaseNavFooter } from "../../_components/case-nav-footer";
 import { CaseFooter } from "../../_components/case-footer";
 import { getCaseStudyNav } from "../../_components/case-study-order";
 
-import { LivingSystemSection } from "./_living-system/living-system-section";
 import {
-  AuditInspectionDiagram,
-  DataGridDiagram,
-  InformationArchitectureDiagram,
-} from "./_diagrams/structure-diagrams";
+  CaseloadPrototype,
+  DesignSystemPrototype,
+  NavigationPrototype,
+} from "./_living-system/living-system-section";
+import { InformationArchitectureDiagram } from "./_diagrams/structure-diagrams";
 
 /**
  * portfolio-import — "Monster Legacy Modernization" alternate case study.
@@ -43,9 +43,9 @@ import {
  * fictional, clearly-labeled, built from real components — lives.
  */
 export const metadata: Metadata = {
-  title: "Monster Modernization | High-Density Enterprise Casework Architecture",
+  title: "Monster Modernization | Enterprise Casework Architecture",
   description:
-    "Lead UX Architect case study on modernizing navigation, data tables, and audit workflows for a complex public sector casework platform.",
+    "Lead UX Architect case study on modernizing navigation and audit workflows for a complex public sector casework platform.",
   icons: { icon: "/portfolio-import/favicon.png" },
   robots: { index: false, follow: false },
 };
@@ -61,16 +61,10 @@ const NAV_LINKS = [
 const TOC_ITEMS = [
   { href: "#overview", label: "Overview" },
   { href: "#challenge", label: "The Modernization Challenge" },
-  { href: "#information-architecture", label: "Information Architecture" },
-  { href: "#audit-inspection", label: "Audit Inspection" },
-  { href: "#data-grids", label: "Data Grids" },
-  { href: "#living-system-navigation", label: "Navigation & Hierarchy" },
-  { href: "#living-system-data", label: "Data & Tables" },
-  { href: "#living-system-forms", label: "Forms & Workflows" },
-  { href: "#living-system-history", label: "History & Change Tracking" },
-  { href: "#living-system-design-system", label: "Design System" },
-  { href: "#living-system-components", label: "Components" },
-  { href: "#modernized-experience", label: "The Modernized Experience" },
+  { href: "#information-architecture", label: "Platform Architecture" },
+  { href: "#caseload-compliance", label: "Caseload & Compliance" },
+  { href: "#design-system", label: "Design System & Components" },
+  { href: "#modernized-experience", label: "Live-System Constraints" },
 ];
 
 export default function MonsterModernizationCaseStudyPage() {
@@ -92,187 +86,209 @@ export default function MonsterModernizationCaseStudyPage() {
         <CaseHero
           tag="Monster Government Solutions"
           title="Modernizing a Complex Enterprise Application"
-          intro="Restructuring six-tier navigation, contextual audit inspection, and dense data grids without sacrificing capability"
+          intro="Restructuring six-tier navigation and contextual audit inspection without sacrificing capability"
           meta={[
             { label: "Role", value: "Lead UX Architect" },
             {
               label: "Focus Areas",
-              value: "Information Architecture, Enterprise Workflows, High-Density Data Grids",
+              value: "Information Architecture, Enterprise Workflows",
             },
           ]}
         />
 
         <CaseSection id="overview" heading="Overview" tone="paper" className="border-t-0">
           <p>
-            Over years of incremental feature growth, an established enterprise application had accumulated deep
-            structural debt: core functionality was buried up to six levels deep in fragile dropdowns, audit histories
-            opened in workflow-blocking modals, and data-heavy tables forced continuous horizontal scrolling on standard
-            office monitors. Rather than applying a cosmetic visual refresh or stripping out functionality to make the
-            UI look minimal, I led a structural modernization—reorganizing the information architecture around user
-            context, preserving surrounding state during record inspection, and establishing clear scanning hierarchy
-            across dense data tables.
+            Monster Works is an enterprise workforce platform used daily by caseworkers to assess job seekers,
+            coordinate services, and place them into jobs across Customer, Employer, Staff, and Event records,
+            alongside seven specialized program sections.
           </p>
+          <p>
+            Over more than five years of incremental growth, separate design and engineering teams shipped features
+            without a shared structural model and relied on hardcoded navigation patterns that could not be updated
+            globally. That technical and structural debt left the platform with six levels of nested hierarchy,
+            low-priority tools cluttering primary workflows, and frequent context breaks during routine casework.
+          </p>
+          <p>
+            I led an architectural overhaul of the product&apos;s structure, navigation, and record workflows, unifying
+            fragmented modules into a single workspace organized around user context.
+          </p>
+
+          {/* Problem / Solution summary — div/span only, since CaseSection styles every descendant p. */}
+          <div className="mt-10 grid max-w-[1000px] grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2">
+            {[
+              {
+                label: "Problem",
+                text: "Separate teams shipping hardcoded features over five years left Monster Works with a top-heavy global menu, six-level navigation depth, and fragmented workflows that broke caseworker context. At the same time, power users still depended on every underlying capability for daily caseloads.",
+              },
+              {
+                label: "Solution",
+                text: "A unified workspace architecture that separates global system tools from active record workflows, consolidates scattered modules into a predictable three-tier structure, and keeps supporting record data accessible in place.",
+              },
+            ].map((item) => (
+              <div key={item.label} className="border-t-2 border-[#0F172A] pt-4">
+                <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#FF5733]">
+                  {item.label}
+                </span>
+                <span className="mt-2 block text-[17px] leading-[1.6] text-[#0F172A]">{item.text}</span>
+              </div>
+            ))}
+          </div>
         </CaseSection>
 
         <CaseSection id="challenge" heading="01 / The Modernization Challenge" tone="paper">
           <h3>Structural Debt Beyond Visual Styling</h3>
           <p>
-            Enterprise applications rarely become difficult to use overnight; they degrade over years of bolting new
-            regulatory and business requirements onto an aging navigation tree. The central constraint of this
-            modernization was{" "}
-            <strong className="text-[#0F172A]">simplifying the structure without oversimplifying the product</strong>.
-            Experienced users relied on deep capabilities and dense record data to process daily workloads—a
-            superficial reskin would leave the underlying friction untouched, while stripping out density would slow
-            down power users.
+            Years of shipping regulatory updates and program features across separate teams had left Monster Works
+            with a rigid, top-heavy structure. The central constraint was simplifying how caseworkers moved through
+            the platform without removing capabilities that power users depended on for daily caseloads.
           </p>
 
-          <p>Three systemic bottlenecks defined the problem:</p>
+          <p>Six structural bottlenecks defined the problem:</p>
 
           <ul>
             <li>
-              <strong className="text-[#0F172A]">Scattered, Six-Tier Navigation:</strong> Related tools were spread
-              across unrelated categories up to six levels deep, forcing users through fragile cascading menus.
+              <strong className="text-[#0F172A]">Unsustainable Hierarchy Depth:</strong> Deep sections pushed
+              workflows up to six levels down and relied on breadcrumbs as a primary navigation mechanism, an
+              architecture that did not scale as new program requirements were added.
             </li>
             <li>
-              <strong className="text-[#0F172A]">Context-Destroying Audit Modals:</strong> Viewing a record&apos;s
-              change history launched a blocking modal that obscured the active workspace.
+              <strong className="text-[#0F172A]">Cross-Module Silos:</strong> Years of independent team delivery left
+              related casework tasks split across disconnected sections with inconsistent grouping logic.
             </li>
             <li>
-              <strong className="text-[#0F172A]">Horizontal Scroll Across Dense Grids:</strong> Unprioritized table
-              columns overflowed typical office viewports, making row tracking error-prone.
+              <strong className="text-[#0F172A]">Mixed Navigation Metaphors:</strong> Competing menu, tab, and
+              sub-navigation patterns overlapped across sections, forcing caseworkers to relearn how to move through
+              the interface depending on where they were in the system.
+            </li>
+            <li>
+              <strong className="text-[#0F172A]">Overloaded Global Navigation:</strong> The left-hand hamburger menu
+              gave low-frequency administrative tools and minor modules the same prime visibility as core workflows.
+            </li>
+            <li>
+              <strong className="text-[#0F172A]">Search Dependency Over Predictable Browsing:</strong> Because
+              top-level navigation was cluttered with secondary tools, caseworkers relied on search just to reach core
+              Customer, Employer, Staff, and Event records.
+            </li>
+            <li>
+              <strong className="text-[#0F172A]">Frequent Context Breaks:</strong> Routine verification and
+              cross-referencing workflows pulled caseworkers out of their active record state instead of keeping
+              supporting information accessible in place.
             </li>
           </ul>
         </CaseSection>
 
-        <CaseSection id="information-architecture" heading="02 / Rethinking the Information Architecture" tone="paper">
-          <h3>Collapsing Six Levels of Scattered Dropdowns into Three Scope-Separated Tiers</h3>
+        <CaseSection
+          id="information-architecture"
+          heading="02 / Platform Architecture"
+          tone="paper"
+          className="pb-10 md:pb-12"
+        >
+          <h3>Unifying Program Silos and State Configurations into One Core Model</h3>
           <p>
-            The core problem in the legacy application was organizational, not visual. Simply moving the existing
-            six-level menu tree into a modern sidebar would have preserved the exact same confusion in a new container.
+            Monster Works had evolved around individual program mandates and state-specific requests across Ohio and
+            Michigan. While some of the seven specialized program modules supported core casework, others operated as
+            disconnected tools with duplicated screens, meaning a core domain like Events was fragmented across modules
+            rather than governed as a unified platform entity.
           </p>
 
-          <p>I restructured the information architecture around two foundational shifts:</p>
+          <p>Re-architecting the platform required resolving three structural and organizational tensions:</p>
 
           <ul>
             <li>
-              <strong className="text-[#0F172A]">Separating Global Tools from Record-Level Context:</strong> The legacy
-              dropdowns conflated system-wide navigation with actions belonging to an active record. I replaced that
-              single cascading tree with a <strong className="text-[#0F172A]">three-tier sidebar</strong> that
-              separated persistent global navigation from record-specific context—ensuring users always knew whether
-              they were acting at the system level or inside an individual profile.
+              <strong className="text-[#0F172A]">Moving from Program-Specific Views to Shared Domain Entities:</strong>{" "}
+              Rather than letting each program maintain isolated workflows, I anchored the architecture around four
+              core record entities (Customer, Employer, Staff, and Event) and positioned the seven specialized programs
+              by how they actually intersect with daily caseloads. Shared domains like Events became unified platform
+              entities instead of duplicated program sub-modules.
             </li>
             <li>
-              <strong className="text-[#0F172A]">Consolidating Scattered Functionality:</strong> I audited where tools
-              lived across the application and regrouped fragmented capabilities into logical functional domains,
-              collapsing up to six levels of nested menus into three predictable tiers.
+              <strong className="text-[#0F172A]">Balancing State-Specific Rules with a Canonical Record Model:</strong>{" "}
+              Supporting both Ohio and Michigan meant accommodating distinct regulatory rules without forking the
+              product. I defined a standardized record structure that preserved state-level configuration rules while
+              consolidating 16 fragmented Customer Profile sections (such as Ex-Offender, Veteran Information, Household
+              Composition, and MSFW) into 6 logical domain groups: Core Information, Education, Work History, Barriers,
+              Tests &amp; Assessments, and Documents.
+            </li>
+            <li>
+              <strong className="text-[#0F172A]">Aligning Program Stakeholders and Legacy Power Users:</strong>{" "}
+              Consolidating familiar program screens into a shared model drew heavy pushback from both internal program
+              owners protective of their dedicated workflows and experienced caseworkers reliant on muscle memory. I used
+              workflow audits and usage data to demonstrate that core capabilities were preserved rather than cut,
+              securing alignment without sacrificing the high-density tools daily staff depended on.
             </li>
           </ul>
-
-          <p>
-            The same consolidation applies inside an individual record: eight flat legacy tabs became four grouped
-            destinations, with the separate Case Notes and Event Log tabs now sitting together under History.
-          </p>
 
           <InformationArchitectureDiagram />
-
-          <h4>Design Trade-Off — Pointer Speed vs. Menu Stability</h4>
-          <p>
-            Moving to a three-tier sidebar eliminated six-level menu collapses, but multi-tier flyouts still break down
-            under fast pointer movement if hover states trigger instantaneously or dismiss the moment a cursor moves
-            diagonally toward a submenu. To keep navigation responsive without forcing extra clicks, we implemented
-            asymmetric hover delays—approximately 60 ms before opening to ignore accidental pass-throughs, and 150 ms
-            before closing to forgive diagonal cursor trajectories.
-          </p>
         </CaseSection>
 
-        <CaseSection id="audit-inspection" heading="03 / Preserving Context During Audit Inspection" tone="paper">
-          <h3>Replacing Blocking Modals with Inline Row Expansion</h3>
+        <NavigationPrototype />
+
+        <CaseSection
+          id="caseload-compliance"
+          heading="03 / High-Density Caseload & Compliance Execution"
+          tone="paper"
+          className="pb-10 md:pb-12"
+        >
+          <h3>Designing Power-User Workspaces for Speed and Auditability</h3>
           <p>
-            Once users could reach a record cleanly, the next major friction point hit during audit verification. In
-            the legacy system, inspecting a record&apos;s change history opened a blocking modal that covered the
-            active form and surrounding rows, forcing users to cross-reference changes without seeing the live record
-            in context.
+            A cleaner information architecture only succeeds if front-line staff can execute complex, regulated tasks
+            without slowing down. Legacy enterprise tools often fail during modernization because teams oversimplify
+            dense screens, forcing experienced caseworkers into extra clicks, blocking modals, and external
+            spreadsheets.
           </p>
           <p>
-            I eliminated the audit modals and redesigned the flow around{" "}
-            <strong className="text-[#0F172A]">inline expandable rows</strong> inside the audit trail table. Expanding
-            an entry reveals the complete change record in place—who made the change, when it occurred, and previous
-            versus updated values—while keeping the surrounding workspace intact.
+            To preserve speed across daily caseloads in Ohio and Michigan, I established three operational interaction
+            rules:
           </p>
-
-          <h4>Design Trade-Off — Context Preservation vs. Vertical Table Growth</h4>
-          <p>
-            Inline expansion eliminates modal open-and-close steps and keeps the active record visible, at the cost of
-            increasing vertical table height when multiple entries are expanded. Structuring the inline diff as a
-            compact, scannable block preserved surrounding orientation without overwhelming the table.
-          </p>
-
-          <AuditInspectionDiagram />
-        </CaseSection>
-
-        <CaseSection id="data-grids" heading="04 / Balancing Information Density and Readability" tone="paper">
-          <h3>Structuring Enterprise Data Grids for Typical Office Viewports</h3>
-          <p>
-            Primary casework tables needed to support high attribute density without forcing constant horizontal
-            scrolling across standard office monitors.
-          </p>
-
-          <p>
-            Built on <strong className="text-[#0F172A]">AG Grid</strong>, the redesigned tables established a strict
-            scanning hierarchy:
-          </p>
-
           <ul>
             <li>
-              <strong className="text-[#0F172A]">Pinned Primary Identifiers:</strong> Key row anchors such as{" "}
-              <strong className="text-[#0F172A]">Case ID</strong> were pinned to the left edge so record identity
-              stayed locked during horizontal inspection.
+              <strong className="text-[#0F172A]">High-Density Caseload Scanning:</strong> Structured workspace grids
+              around scannable field hierarchy, persistent record identifiers, and inline filtering so staff can triage
+              large caseloads without losing orientation.
             </li>
             <li>
-              <strong className="text-[#0F172A]">Viewport-Conscious Column Prioritization:</strong> Case status and
-              priority sit immediately after the pinned Case ID, followed by category, review, and last activity. Every
-              column except Case ID can be hidden from the grid&apos;s Columns panel, so users can narrow the table to
-              what fits their monitor without losing the row anchor.
+              <strong className="text-[#0F172A]">Progressive Disclosure for Regulated Intake:</strong> Separated core
+              daily inputs from edge-case state compliance fields so routine updates move fast while specialized program
+              requirements remain accessible on demand.
+            </li>
+            <li>
+              <strong className="text-[#0F172A]">In-Place Compliance Verification:</strong> Replaced blocking audit
+              modals with inline change inspection inside the record timeline, letting staff verify field-level updates
+              while keeping active record context visible.
             </li>
           </ul>
-
-          <DataGridDiagram />
         </CaseSection>
 
-        <LivingSystemSection />
+        <CaseloadPrototype />
+
+        <CaseSection
+          id="design-system"
+          heading="04 / Governed Design System & Component Architecture"
+          tone="paper"
+          className="pb-10 md:pb-12"
+        >
+          <h3>Codifying Workspace Patterns into Shared Components</h3>
+          <p>
+            With separate teams building for both Ohio and Michigan, every new screen was another chance for the
+            product to drift back into inconsistent patterns. The workspace patterns above (tiered navigation, dense
+            caseload tables, progressive forms, and inline change history) were codified into shared, WCAG 2.1 AA
+            compliant components, so every team and state deployment built from the same foundations, states, and
+            variants.
+          </p>
+        </CaseSection>
+
+        <DesignSystemPrototype />
 
         <CaseSection
           id="modernized-experience"
-          heading="05 / The Modernized Experience"
+          heading="05 / Live-System Constraints & Stakeholder Alignment"
           tone="surface"
           className="bg-[#F6F7F9] md:pt-[88px] md:pb-[96px]"
         >
-          <h3>Bringing Structure, Context, and Density Together</h3>
-          <p>
-            The reorganized information architecture, inline audit diffs, and structured AG Grid layouts operate as a
-            single cohesive workspace:
-          </p>
-
-          <ul>
-            <li>
-              <strong className="text-[#0F172A]">Navigate by Scope:</strong> Move between persistent global tools and
-              record-level sections across a three-tier sidebar without traversing deep dropdown trees.
-            </li>
-            <li>
-              <strong className="text-[#0F172A]">Inspect History in Place:</strong> Expand audit rows inline to verify
-              before-and-after field values while keeping the active record visible.
-            </li>
-            <li>
-              <strong className="text-[#0F172A]">Scan Dense Records Cleanly:</strong> Review multi-attribute rows
-              anchored by pinned Case IDs within a standard office viewport.
-            </li>
-          </ul>
-
-          <h3>Shipping Into a Live System &amp; Stakeholder Alignment</h3>
           <p>
             Because this was an active, mission-critical government platform rather than a greenfield build,
             structural changes had to respect existing workflows, regulatory requirements, and established power-user
-            habits. Securing stakeholder sign-off meant demonstrating that reorganizing the navigation and table
+            habits. Securing stakeholder sign-off meant demonstrating that reorganizing the navigation
             hierarchy would reduce daily friction without removing required data fields or disrupting veteran
             caseworkers—using interactive prototypes to align product, engineering, and domain stakeholders before
             committing changes to the live system.

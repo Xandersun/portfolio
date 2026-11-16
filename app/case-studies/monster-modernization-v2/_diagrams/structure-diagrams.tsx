@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
 
 /**
- * High-level structural diagrams for the v2 case study's sections 02–04.
+ * High-level structural diagrams for the v2 case study's sections 02–03.
  * Deliberately abstract (boxes, labels, flows, viewport frames) — the
  * interactive reconstruction further down the page covers real UI.
  *
  * Named items come from the reconstruction code; anything the code
- * doesn't name (the legacy menu's deeper levels, the legacy grid's
- * columns) stays generic rather than invented. after-sidebar.tsx has no
+ * doesn't name (the legacy menu's deeper levels) stays generic rather
+ * than invented. after-sidebar.tsx has no
  * admin items, so the legacy Events/Users/Activity Log/System Settings
  * areas appear in the After tier as one grouped "outside scope" node.
  *
@@ -25,18 +25,28 @@ const GLOBAL_NAV = ["Caseload", "Appointments", "Reports"];
 /** after-workspace.tsx — record-level tabs and History's sub-tabs */
 const RECORD_SECTIONS = ["Summary", "Eligibility & Documents", "Referrals & Services", "History"];
 const HISTORY_SUBSECTIONS = ["Activity", "Case Notes", "Related Records"];
-/** after-caseload.tsx — column order after the pinned Case ID */
-const GRID_COLUMNS = ["Case Status", "Priority", "Status", "Category", "Review", "Last Activity"];
 
 /* ------------------------------------------------------------------ */
 /* Shared bits                                                         */
 /* ------------------------------------------------------------------ */
 
-function DiagramFigure({ label, caption, children }: { label: string; caption: ReactNode; children: ReactNode }) {
+function DiagramFigure({
+  number,
+  label,
+  caption,
+  children,
+}: {
+  number: number;
+  label: string;
+  caption: ReactNode;
+  children: ReactNode;
+}) {
   return (
-    <figure aria-label={label} className="mt-10 mb-2 max-w-[1080px] border-t border-[#E2E8F0] pt-8">
+    <figure aria-label={`Figure ${number}: ${label}`} className="mt-10 mb-2 max-w-[1080px] border-t border-[#E2E8F0] pt-8">
       {children}
-      <figcaption className="mt-6 max-w-[760px] text-[13px] leading-[1.55] text-[#64748B]">{caption}</figcaption>
+      <figcaption className="mt-6 max-w-[760px] text-[13.5px] leading-[1.55] text-[#64748B]">
+        <span className="font-bold text-[#0F172A]">Figure {number}.</span> {caption}
+      </figcaption>
     </figure>
   );
 }
@@ -187,6 +197,7 @@ function ModernTiers() {
 export function InformationArchitectureDiagram() {
   return (
     <DiagramFigure
+      number={1}
       label="Information architecture before and after"
       caption="Global tools and record-level work now live in separate, predictable zones instead of one tangled menu."
     >
@@ -236,6 +247,7 @@ function FlowRow({ phase, title, steps }: { phase: "Before" | "After"; title: st
 export function AuditInspectionDiagram() {
   return (
     <DiagramFigure
+      number={2}
       label="Audit inspection flow before and after"
       caption="Change history opens in place, so the record under review never leaves the screen."
     >
@@ -250,109 +262,6 @@ export function AuditInspectionDiagram() {
           title="Modernized: inline row expansion"
           steps={["Active record + audit table", "Expands row inline", "Who, when, and old vs. new values visible in context"]}
         />
-      </div>
-    </DiagramFigure>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* 04 — Data grids                                                     */
-/* ------------------------------------------------------------------ */
-
-const VIEWPORT_WIDTH = 70; // % of the diagram row the "office viewport" frame occupies
-const LEGACY_COLUMN_COUNT = 10; // generic — 7 fit inside the frame, 3 overflow
-
-function ViewportFrame({ children }: { children: ReactNode }) {
-  return (
-    <div className="relative">
-      <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.06em] text-[#94A3B8]">
-        Standard office viewport
-      </span>
-      <div className="relative h-[132px] sm:h-[112px]">
-        <div
-          aria-hidden
-          className="absolute inset-y-0 left-0 border-2 border-[#0F172A]"
-          style={{ width: `${VIEWPORT_WIDTH}%` }}
-        />
-        {children}
-      </div>
-    </div>
-  );
-}
-
-const columnLabelClass =
-  "text-[10.5px] font-semibold leading-tight text-[#334155] max-sm:[writing-mode:vertical-rl] max-sm:rotate-180 sm:text-[11.5px]";
-
-function LegacyGrid() {
-  const columnWidth = 100 / LEGACY_COLUMN_COUNT;
-  return (
-    <div>
-      <PanelHeading phase="Before" title="Legacy grid: unprioritized columns" />
-      <ViewportFrame>
-        <div className="absolute inset-y-[10px] left-[6px] right-0 flex gap-[3px]">
-          {Array.from({ length: LEGACY_COLUMN_COUNT }, (_, i) => {
-            const outside = (i + 1) * columnWidth > VIEWPORT_WIDTH + 0.01;
-            return (
-              <div
-                key={i}
-                aria-hidden
-                className="flex-1"
-                style={
-                  outside
-                    ? { border: "1px dashed #CBD5E1", background: "transparent" }
-                    : { background: "#E2E8F0" }
-                }
-              />
-            );
-          })}
-        </div>
-      </ViewportFrame>
-      <div className="mt-3 flex flex-col gap-1 text-[12.5px] text-[#64748B] sm:flex-row sm:justify-between">
-        <span>No locked row anchor</span>
-        <span>Columns continue past the viewport → horizontal scroll</span>
-      </div>
-    </div>
-  );
-}
-
-function ModernGrid() {
-  return (
-    <div>
-      <PanelHeading phase="After" title="Modernized AG Grid: pinned anchor, prioritized columns" />
-      <ViewportFrame>
-        <div
-          className="absolute inset-y-[10px] left-[6px] flex gap-[3px]"
-          style={{ width: `calc(${VIEWPORT_WIDTH}% - 12px)` }}
-        >
-          <div className="flex w-[17%] shrink-0 items-start p-2" style={{ background: INK }}>
-            <span className={columnLabelClass} style={{ color: "#FFFFFF" }}>
-              Case ID
-            </span>
-          </div>
-          {GRID_COLUMNS.map((col) => (
-            <div key={col} className="flex min-w-0 flex-1 items-start bg-[#E2E8F0] p-2">
-              <span className={columnLabelClass}>{col}</span>
-            </div>
-          ))}
-        </div>
-      </ViewportFrame>
-      <div className="mt-3 flex flex-col gap-1 text-[12.5px] text-[#64748B] sm:flex-row sm:justify-between">
-        <span>Case ID pinned to the left edge</span>
-        <span>Core triage attributes fit within the viewport</span>
-      </div>
-    </div>
-  );
-}
-
-export function DataGridDiagram() {
-  return (
-    <DiagramFigure
-      label="Data grid layout before and after"
-      caption="Case ID stays anchored while core triage attributes fit within a standard office monitor."
-    >
-      <div className="flex flex-col gap-12">
-        <LegacyGrid />
-        <ModernGrid />
       </div>
     </DiagramFigure>
   );
