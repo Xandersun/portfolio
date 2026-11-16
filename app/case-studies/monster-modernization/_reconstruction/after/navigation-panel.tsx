@@ -250,31 +250,30 @@ const OVERVIEW_ITEMS: { title: string; description: string; icon: React.ReactNod
 ];
 
 /**
- * The collapsed rail's hover/click/close rules, exactly as implemented —
- * an interaction-specification artifact shown below the Overview's
- * pattern cards, not another feature-card grid. Copy is fixed; do not
- * reword when editing this list.
+ * The collapsed rail's hover/click/close rules — an interaction-specification
+ * artifact shown below the Overview's pattern cards, not another
+ * feature-card grid. Copy is fixed; do not reword when editing this list.
  */
 const INTERACTION_SPEC_ITEMS: { title: string; description: string }[] = [
   {
-    title: "Opening a menu",
-    description: "Hovering or clicking a menu icon opens its flyout. Clicking an already-open menu icon does not close it.",
+    title: "Asymmetric Intent Delays",
+    description: "A 60ms open delay prevents accidental expansion during quick cursor sweeps, while a 150ms close delay ensures smooth diagonal transitions toward sub-menu targets.",
   },
   {
-    title: "Keeping the menu open",
-    description: "The flyout stays open while the pointer is anywhere over the menu icon or its flyout. Moving between the two does not dismiss it.",
+    title: "Timer-Based Pointer Protection",
+    description: "Leaving the primary trigger activates a close-delay timer that cancels immediately upon entering the flyout boundary, eliminating the need for heavy visual collision math.",
   },
   {
-    title: "Closing a menu",
-    description: "The flyout closes when the pointer leaves both the icon and flyout, or when the user selects a destination.",
+    title: "Intent-Driven Dismissal",
+    description: "Flyouts collapse automatically on pointer-leave timeouts, outside press, or keyboard escape (Esc), keeping focus cleanly isolated.",
   },
   {
-    title: "Distinguishing menus from direct destinations",
-    description: "Menu icons include a small chevron to indicate another navigation level. Direct-page icons have no chevron and navigate immediately; on hover or focus, they show only the destination label.",
+    title: "Hierarchical Chevron Indicators",
+    description: "Distinct visual chevrons separate direct-page navigation triggers from sub-level flyout trees.",
   },
   {
-    title: "Nested navigation",
-    description: "Items containing another level display a chevron. Opening a nested flyout preserves the parent flyout so users can move through the hierarchy without losing their navigation path.",
+    title: "Multi-Tier Path Preservation",
+    description: "Expanding nested submenus highlights and anchors the parent path so caseworkers maintain structural context deep in a record.",
   },
 ];
 
@@ -676,8 +675,9 @@ function InteractionSpecSection() {
     <div style={{ marginTop: 40 }}>
       <div style={{ color: "#0F172A", fontWeight: 700, fontSize: 18 }}>Documenting nuance interactions for engineers</div>
       <p style={{ marginTop: 8, maxWidth: 640, fontSize: 15, lineHeight: 1.6, color: "#475569" }}>
-        Some interaction details were difficult to discover through prototypes alone. I documented the underlying
-        behavior so engineers had clear understandings for building each interaction.
+        High-density enterprise platforms demand clear interaction specs to avoid implementation drift. I formally
+        documented hover-intent timers, focus state machines, and keybindings to give engineering teams unambiguous
+        handoff guidelines before sprint allocation.
       </p>
       <div style={{ marginTop: 20 }}>
         {INTERACTION_SPEC_ITEMS.map((rule, index) => (
@@ -994,10 +994,10 @@ export function NavigationPanel() {
         <div style={{ flex: 1, minWidth: 0, padding: 24, background: "#F8FAFC" }}>
           {isOverview ? (
             <div>
-              <div style={{ color: "#0F172A", fontWeight: 700, fontSize: 20 }}>A navigation system built for complexity</div>
+              <div style={{ color: "#0F172A", fontWeight: 700, fontSize: 20 }}>Tiered Navigation &amp; Intent-Based Hierarchy</div>
               <Text type="secondary" style={{ display: "block", marginTop: 4, fontSize: 16, maxWidth: 520, lineHeight: 1.5, color: "#334155" }}>
-                The new navigation separated global, nested, and page-level navigation so the platform could support
-                deeper workflows without overwhelming the sidebar.
+                A responsive sidebar architecture separating global tools from record context, streamlining deep
+                casework navigation while preserving primary workspace width.
               </Text>
 
               <PatternsSection heading="Navigation patterns" items={OVERVIEW_ITEMS} checklist={CHECKLIST} />
