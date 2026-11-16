@@ -12,7 +12,12 @@ import { CaseNavFooter } from "../../_components/case-nav-footer";
 import { CaseFooter } from "../../_components/case-footer";
 import { getCaseStudyNav } from "../../_components/case-study-order";
 
-import { LivingSystemSection } from "./_living-system/living-system-section";
+import {
+  CaseloadPrototype,
+  DesignSystemPrototype,
+  NavigationPrototype,
+} from "./_living-system/living-system-section";
+import { InformationArchitectureDiagram } from "./_diagrams/structure-diagrams";
 
 /**
  * portfolio-import — "Monster Legacy Modernization" alternate case study.
@@ -38,9 +43,9 @@ import { LivingSystemSection } from "./_living-system/living-system-section";
  * fictional, clearly-labeled, built from real components — lives.
  */
 export const metadata: Metadata = {
-  title: "Monster Government Solutions — Modernizing a Mature Enterprise Platform | Alex Sun",
+  title: "Monster Modernization | Enterprise Casework Architecture",
   description:
-    "How I approached recurring interaction problems in a mature government platform — navigation, data, forms, and system history — without rewriting the product from scratch.",
+    "Lead UX Architect case study on modernizing navigation and audit workflows for a complex public sector casework platform.",
   icons: { icon: "/portfolio-import/favicon.png" },
   robots: { index: false, follow: false },
 };
@@ -54,14 +59,12 @@ const NAV_LINKS = [
 ];
 
 const TOC_ITEMS = [
-  { href: "#challenges", label: "The Problem" },
-  { href: "#living-system-navigation", label: "Navigation & Hierarchy" },
-  { href: "#living-system-data", label: "Data & Tables" },
-  { href: "#living-system-forms", label: "Forms & Workflows" },
-  { href: "#living-system-history", label: "History & Change Tracking" },
-  { href: "#living-system-design-system", label: "Design System" },
-  { href: "#living-system-components", label: "Components" },
-  { href: "#outcomes", label: "Outcomes" },
+  { href: "#overview", label: "Overview" },
+  { href: "#challenge", label: "The Modernization Challenge" },
+  { href: "#information-architecture", label: "Platform Architecture" },
+  { href: "#caseload-compliance", label: "Caseload & Compliance" },
+  { href: "#design-system", label: "Design System & Components" },
+  { href: "#modernized-experience", label: "Live-System Constraints" },
 ];
 
 export default function MonsterModernizationCaseStudyPage() {
@@ -82,53 +85,213 @@ export default function MonsterModernizationCaseStudyPage() {
       <main id="main-content">
         <CaseHero
           tag="Monster Government Solutions"
-          title="Modernizing a mature enterprise platform."
-          intro="Monster Government Solutions supported complex casework across Customer, Employer, Staff, and Event profiles. I worked on modernizing a mature enterprise product that had grown and changed over many years."
-          pills={["Enterprise Platforms", "Information Architecture", "Design Systems", "Platform Modernization"]}
-          pillBackground="#FFFFFF"
+          title="Modernizing a Complex Enterprise Application"
+          intro="Restructuring six-tier navigation and contextual audit inspection without sacrificing capability"
           meta={[
-            { label: "Role", value: "UX Manager" },
-            { label: "Domain", value: "Public Sector / GovTech" },
+            { label: "Role", value: "Lead UX Architect" },
+            {
+              label: "Focus Areas",
+              value: "Information Architecture, Enterprise Workflows",
+            },
           ]}
         />
 
-        <CaseSection id="challenges" heading="Years of growth had made the product harder to change." tone="paper" className="border-t-0">
+        <CaseSection id="overview" heading="Overview" tone="paper" className="border-t-0">
           <p>
-            Over time, the Customer experience had
-            accumulated different structures, different interaction patterns, information-dense workflows, and legacy
-            dependencies. Improving one part of the product often meant working around decisions made somewhere else.
+            Monster Works is an enterprise workforce platform used daily by caseworkers to assess job seekers,
+            coordinate services, and place them into jobs across Customer, Employer, Staff, and Event records,
+            alongside seven specialized program sections.
           </p>
+          <p>
+            Over more than five years of incremental growth, separate design and engineering teams shipped features
+            without a shared structural model and relied on hardcoded navigation patterns that could not be updated
+            globally. That technical and structural debt left the platform with six levels of nested hierarchy,
+            low-priority tools cluttering primary workflows, and frequent context breaks during routine casework.
+          </p>
+          <p>
+            I led an architectural overhaul of the product&apos;s structure, navigation, and record workflows, unifying
+            fragmented modules into a single workspace organized around user context.
+          </p>
+
+          {/* Problem / Solution summary — div/span only, since CaseSection styles every descendant p. */}
+          <div className="mt-10 grid max-w-[1000px] grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2">
+            {[
+              {
+                label: "Problem",
+                text: "Separate teams shipping hardcoded features over five years left Monster Works with a top-heavy global menu, six-level navigation depth, and fragmented workflows that broke caseworker context. At the same time, power users still depended on every underlying capability for daily caseloads.",
+              },
+              {
+                label: "Solution",
+                text: "A unified workspace architecture that separates global system tools from active record workflows, consolidates scattered modules into a predictable three-tier structure, and keeps supporting record data accessible in place.",
+              },
+            ].map((item) => (
+              <div key={item.label} className="border-t-2 border-[#0F172A] pt-4">
+                <span className="block text-[12px] font-bold uppercase tracking-[0.08em] text-[#FF5733]">
+                  {item.label}
+                </span>
+                <span className="mt-2 block text-[17px] leading-[1.6] text-[#0F172A]">{item.text}</span>
+              </div>
+            ))}
+          </div>
+        </CaseSection>
+
+        <CaseSection id="challenge" heading="01 / The Modernization Challenge" tone="paper">
+          <h3>Structural Debt Beyond Visual Styling</h3>
+          <p>
+            Years of shipping regulatory updates and program features across separate teams had left Monster Works
+            with a rigid, top-heavy structure. The central constraint was simplifying how caseworkers moved through
+            the platform without removing capabilities that power users depended on for daily caseloads.
+          </p>
+
+          <p>Six structural bottlenecks defined the problem:</p>
 
           <ul>
             <li>
-              <strong className="text-[#0F172A]">Inconsistent Patterns:</strong> Different parts of the product had been
-              built independently, each solving similar problems in its own way.
+              <strong className="text-[#0F172A]">Unsustainable Hierarchy Depth:</strong> Deep sections pushed
+              workflows up to six levels down and relied on breadcrumbs as a primary navigation mechanism, an
+              architecture that did not scale as new program requirements were added.
             </li>
             <li>
-              <strong className="text-[#0F172A]">Information Density:</strong> Complex casework required navigating and
-              interpreting large amounts of information without losing context.
+              <strong className="text-[#0F172A]">Cross-Module Silos:</strong> Years of independent team delivery left
+              related casework tasks split across disconnected sections with inconsistent grouping logic.
             </li>
             <li>
-              <strong className="text-[#0F172A]">Legacy Dependencies:</strong> Long-standing workflows and integrations
-              made changes risky to introduce.
+              <strong className="text-[#0F172A]">Mixed Navigation Metaphors:</strong> Competing menu, tab, and
+              sub-navigation patterns overlapped across sections, forcing caseworkers to relearn how to move through
+              the interface depending on where they were in the system.
+            </li>
+            <li>
+              <strong className="text-[#0F172A]">Overloaded Global Navigation:</strong> The left-hand hamburger menu
+              gave low-frequency administrative tools and minor modules the same prime visibility as core workflows.
+            </li>
+            <li>
+              <strong className="text-[#0F172A]">Search Dependency Over Predictable Browsing:</strong> Because
+              top-level navigation was cluttered with secondary tools, caseworkers relied on search just to reach core
+              Customer, Employer, Staff, and Event records.
+            </li>
+            <li>
+              <strong className="text-[#0F172A]">Frequent Context Breaks:</strong> Routine verification and
+              cross-referencing workflows pulled caseworkers out of their active record state instead of keeping
+              supporting information accessible in place.
             </li>
           </ul>
         </CaseSection>
 
-        <LivingSystemSection />
+        <CaseSection
+          id="information-architecture"
+          heading="02 / Platform Architecture"
+          tone="paper"
+          className="pb-10 md:pb-12"
+        >
+          <h3>Unifying Program Silos and State Configurations into One Core Model</h3>
+          <p>
+            Monster Works had evolved around individual program mandates and state-specific requests across Ohio and
+            Michigan. While some of the seven specialized program modules supported core casework, others operated as
+            disconnected tools with duplicated screens, meaning a core domain like Events was fragmented across modules
+            rather than governed as a unified platform entity.
+          </p>
+
+          <p>Re-architecting the platform required resolving three structural and organizational tensions:</p>
+
+          <ul>
+            <li>
+              <strong className="text-[#0F172A]">Moving from Program-Specific Views to Shared Domain Entities:</strong>{" "}
+              Rather than letting each program maintain isolated workflows, I anchored the architecture around four
+              core record entities (Customer, Employer, Staff, and Event) and positioned the seven specialized programs
+              by how they actually intersect with daily caseloads. Shared domains like Events became unified platform
+              entities instead of duplicated program sub-modules.
+            </li>
+            <li>
+              <strong className="text-[#0F172A]">Balancing State-Specific Rules with a Canonical Record Model:</strong>{" "}
+              Supporting both Ohio and Michigan meant accommodating distinct regulatory rules without forking the
+              product. I defined a standardized record structure that preserved state-level configuration rules while
+              consolidating 16 fragmented Customer Profile sections (such as Ex-Offender, Veteran Information, Household
+              Composition, and MSFW) into 6 logical domain groups: Core Information, Education, Work History, Barriers,
+              Tests &amp; Assessments, and Documents.
+            </li>
+            <li>
+              <strong className="text-[#0F172A]">Aligning Program Stakeholders and Legacy Power Users:</strong>{" "}
+              Consolidating familiar program screens into a shared model drew heavy pushback from both internal program
+              owners protective of their dedicated workflows and experienced caseworkers reliant on muscle memory. I used
+              workflow audits and usage data to demonstrate that core capabilities were preserved rather than cut,
+              securing alignment without sacrificing the high-density tools daily staff depended on.
+            </li>
+          </ul>
+
+          <InformationArchitectureDiagram />
+        </CaseSection>
+
+        <NavigationPrototype />
 
         <CaseSection
-          id="outcomes"
-          heading="Each improvement made the next one easier."
+          id="caseload-compliance"
+          heading="03 / High-Density Caseload & Compliance Execution"
+          tone="paper"
+          className="pb-10 md:pb-12"
+        >
+          <h3>Designing Power-User Workspaces for Speed and Auditability</h3>
+          <p>
+            A cleaner information architecture only succeeds if front-line staff can execute complex, regulated tasks
+            without slowing down. Legacy enterprise tools often fail during modernization because teams oversimplify
+            dense screens, forcing experienced caseworkers into extra clicks, blocking modals, and external
+            spreadsheets.
+          </p>
+          <p>
+            To preserve speed across daily caseloads in Ohio and Michigan, I established three operational interaction
+            rules:
+          </p>
+          <ul>
+            <li>
+              <strong className="text-[#0F172A]">High-Density Caseload Scanning:</strong> Structured workspace grids
+              around scannable field hierarchy, persistent record identifiers, and inline filtering so staff can triage
+              large caseloads without losing orientation.
+            </li>
+            <li>
+              <strong className="text-[#0F172A]">Progressive Disclosure for Regulated Intake:</strong> Separated core
+              daily inputs from edge-case state compliance fields so routine updates move fast while specialized program
+              requirements remain accessible on demand.
+            </li>
+            <li>
+              <strong className="text-[#0F172A]">In-Place Compliance Verification:</strong> Replaced blocking audit
+              modals with inline change inspection inside the record timeline, letting staff verify field-level updates
+              while keeping active record context visible.
+            </li>
+          </ul>
+        </CaseSection>
+
+        <CaseloadPrototype />
+
+        <CaseSection
+          id="design-system"
+          heading="04 / Governed Design System & Component Architecture"
+          tone="paper"
+          className="pb-10 md:pb-12"
+        >
+          <h3>Codifying Workspace Patterns into Shared Components</h3>
+          <p>
+            With separate teams building for both Ohio and Michigan, every new screen was another chance for the
+            product to drift back into inconsistent patterns. The workspace patterns above (tiered navigation, dense
+            caseload tables, progressive forms, and inline change history) were codified into shared, WCAG 2.1 AA
+            compliant components, so every team and state deployment built from the same foundations, states, and
+            variants.
+          </p>
+        </CaseSection>
+
+        <DesignSystemPrototype />
+
+        <CaseSection
+          id="modernized-experience"
+          heading="05 / Live-System Constraints & Stakeholder Alignment"
           tone="surface"
           className="bg-[#F6F7F9] md:pt-[88px] md:pb-[96px]"
         >
           <p>
-            As useful patterns became reusable, the team didn&rsquo;t have to solve the same interaction problems from
-            scratch on every screen. New work could build on decisions that had already been designed, reviewed,
-            tested, and refined. Because this was a mature product, that consistency was introduced incrementally:
-            piloted in lower-risk areas, validated with experienced users, and governed through design review as
-            later work continued.
+            Because this was an active, mission-critical government platform rather than a greenfield build,
+            structural changes had to respect existing workflows, regulatory requirements, and established power-user
+            habits. Securing stakeholder sign-off meant demonstrating that reorganizing the navigation
+            hierarchy would reduce daily friction without removing required data fields or disrupting veteran
+            caseworkers—using interactive prototypes to align product, engineering, and domain stakeholders before
+            committing changes to the live system.
           </p>
         </CaseSection>
 
